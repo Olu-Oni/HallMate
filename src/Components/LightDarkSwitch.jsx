@@ -1,7 +1,6 @@
 import { styled } from '@mui/material/styles';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-import { useState } from 'react';
 
 const MaterialUISwitch = styled(Switch)(({ theme, checked }) => ({
     width: 50,

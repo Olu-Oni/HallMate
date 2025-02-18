@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  --text-font-size: 0.9rem;
+  --text-font-size: 1em;
 
   /* Burger */
   --bar-width: 20px;
@@ -17,7 +17,7 @@
   --pimary-orange: #f39c12;
   --secondary-blue: #e5f7ff;
   --secondary-orange: #fcf3e3;
-  --primary-text: #000000;
+  --primary-text: #354a5f;
   --primary-bg-color: white;
   --secondary-bg-color: #f9f9f9;
 }
@@ -32,6 +32,9 @@
   --secondary-bg-color: hsl(210, 29%, 22%);
 }
 
+.secondaryBlue{
+  fill: var(--primary-text);
+}
 * {
   transition: all 0.2s ease-in-out;
   font-size: var(--text-font-size);
@@ -42,9 +45,17 @@
 a {
   cursor: pointer;
 }
+h1{
+  @apply font-semibold
+}
+
+h2 {
+  @apply lg:text-[0.9rem] text-[0.8rem]
+}
+
 #root {
   background-color: var(--primary-bg-color);
-  @apply min-h-dvh w-dvw flex flex-col;
+  @apply min-h-dvh max-w-full flex flex-col;
 }
 
 .logo1 {
@@ -75,6 +86,12 @@ main {
 .doorKnob{
   stroke: var(--primary-bg-color)
 }
+
+/* sudent info section */
+.studentInfo-bg{
+  background: var(--secondary-bg-color);
+}
+
 /* slide-Menu */
 .slide-menu {
   background-color: var(--secondary-bg-color);
@@ -91,7 +108,7 @@ nav{
 }
 @media not all and (min-width: 768px) {
   .nav_item:hover {
-    background-color: var(--pimary-orange);
+    background-color: var(--secondary-orange);
     transition: color none;
     @apply translate-x-[.5em];
   }
