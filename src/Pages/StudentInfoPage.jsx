@@ -4,7 +4,7 @@ const StudentInfoPage = () => {
   const studentInfo = {
     id: "21/3188",
     name: "Jhon Doe",
-    merits: -10,
+    merits: 30,
     Full_Name: "Jhon Micheal Doe",
     Course_of_Study: "Information Technology",
     Department: "information Technology",
@@ -31,14 +31,14 @@ const StudentInfoPage = () => {
             <h1>Student ID: {studentInfo.id}</h1>
           </div>
           <div className="flex-grow flex justify-center text-[1.2rem]">
-            <h1 className=" text-[1.2rem] mr-2">Merits:</h1>
+            <h1 className=" text-[1.2rem] mr-2">Merits Points:</h1>
             <h1 className={`${meritColor(studentInfo.merits)}`}>
               {studentInfo.merits}pts
             </h1>
           </div>
         </header>
         <div className="my-8 mx-4">
-          <h2 className="underline mt-4">
+          <h2 className="underline mt-4" style={{fontSize: '1.5rem', fontWeight: 'bold', color: '#333' }}>
             <i>Additional Information</i>
           </h2>
           {/* object gets turned into array containing keys and values as the sub-array values */}
