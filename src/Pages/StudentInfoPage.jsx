@@ -3,9 +3,9 @@ import UserCircle from "../Components/svg/UserCircle";
 const StudentInfoPage = () => {
   const studentInfo = {
     id: "21/3188",
-    name: "Jhon Doe",
+    name: "John Doe",
     merits: 30,
-    Full_Name: "Jhon Micheal Doe",
+    Full_Name: "John Micheal Doe",
     Course_of_Study: "Information Technology",
     Department: "information Technology",
     Faculty: "Computing and Engineering Sciences",
