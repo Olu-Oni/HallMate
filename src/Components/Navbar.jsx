@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import LightDarkSwitch from "./LightDarkSwitch";
 import DoorIcon from "./svg/DoorIconSVG";
-import { MyTheme } from "../App";
+import { MyStates } from "../App";
 // import { ReactComponent as iconDoor} from "../assets/icon_door.svg";
 
 const SlideMenu = ({ navNames, status }) => {
@@ -58,7 +58,7 @@ const SlideMenu = ({ navNames, status }) => {
             className="hover:bg-slate-900  rounded-bl-3xl px-7 w-full py-2 flex gap-2 justify-center border-t-2 absolute bottom-0 font-semibold"
           >
             {/* Door Icon */}
-            <DoorIcon/>
+            <DoorIcon />
             <h2>Log out</h2>
           </Link>
         </ul>
@@ -75,14 +75,18 @@ const NavItem = ({ nav }) => {
         location.pathname === `/${nav.loc}` ? "active nav_item" : "nav_item "
       }
     >
-      <Link to={`/${nav.loc}`}><h2>{nav.name}</h2></Link>
+      <Link to={`/${nav.loc}`}>
+        <h2>{nav.name}</h2>
+      </Link>
     </li>
   );
 };
 
 // Main Nav Setion
 const Navbar = () => {
-  const { isChecked, toggleTheme } = useContext(MyTheme);
+  //changed the way the useContext was used for other comps. to work smoother
+  const myStates = useContext(MyStates);
+  const { isChecked, toggleTheme } = myStates.myTheme;
   const navNames = [
     { loc: "student_info", name: "Student Information" },
     { loc: "requests", name: "Requests" },
@@ -110,7 +114,6 @@ const Navbar = () => {
             to={"/login"}
             className="px-3 py-2  relative top-3 hover:bg-black hover:text-white border-2 border-black h-fit rounded-lg"
           >
-            
             Log out
           </Link>
         </div>
