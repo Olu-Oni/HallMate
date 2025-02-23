@@ -16,13 +16,13 @@ const StudentInfoPage = () => {
         <header className="flex flex-wrap max-sm:flex-col items-center text-center sm:gap-x-14 gap-7">
           <UserCircle />
           <div className="self-center">
-            <h1>Name: {student.name}</h1>
-            <h1>Student ID: {student.id}</h1>
+            <h1>Name: {student.displayInfo.name}</h1>
+            <h1>Student ID: {student.displayInfo.id}</h1>
           </div>
           <div className="flex-grow flex justify-center text-[1.2rem]">
             <h1 className=" text-[1.2rem] mr-2">Merits Points:</h1>
-            <h1 className={`${meritColor(student.merits)}`}>
-              {student.merits}pts
+            <h1 className={`${meritColor(student.displayInfo.merits)}`}>
+              {student.displayInfo.merits}pts
             </h1>
           </div>
         </header>
@@ -62,12 +62,12 @@ const StudentInfoPage = () => {
 
 const InfoRow = ({ heading, value }) => {
   return (
-    <div className="flex  gap-4 my-5 text-[0.85rem] min-w-[480px] md:min-w-[50%] text-nowrap">
-      <div className="w-28 sm:w-1/4 ml-6 font-semibold">
+    <div className="flex  gap-4 my-5 text-[0.85rem] max-sm:w-full sm:min-w-[480px] md:min-w-[50%] max-sm:justify-around text-nowrap">
+      <div className="w-fit sm:w-1/4 ml-6 font-semibold">
         <label htmlFor={heading}>{heading.replaceAll("_", " ")}:</label>{" "}
         {/* Label for accessibility */}
       </div>
-      <div className="ml-6">
+      <div className="ml-6 max-sm:text-wrap">
         <span id={heading}>{value}</span> {/* Or an input if needed */}
       </div>
     </div>

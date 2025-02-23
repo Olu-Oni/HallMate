@@ -13,13 +13,15 @@
   --burger-height: calc((var(--bar-height) * 3) + var(--burger-gap) * 2);
 }
 .light {
-  --primary-blue: #354a5f;
+  --primary-blue: #34495E;
   --pimary-orange: #f39c12;
   --secondary-blue: #e5f7ff;
   --secondary-orange: #fcf3e3;
-  --primary-text: #354a5f;
+  --primary-text: #34495E;
   --primary-bg-color: white;
   --secondary-bg-color: #f9f9f9;
+  --tertiary-bg-color:  #fcf3e3;
+  --tertiary-text: hsl(210, 29%, 22%);
 }
 .dark {
   --primary-blue: #e5f7ff;
@@ -27,13 +29,30 @@
   --secondary-blue: #e5f7ff;
   --secondary-orange: #fcf3e3;
   --primary-text: #e5f7ff;
-  --secondary-text: #fcf3e3;
   --primary-bg-color: hsl(208, 25%, 12%);
   --secondary-bg-color: hsl(210, 29%, 22%);
+  --tertiary-bg-color: #e5f7ff;
+  --tertiary-text: #34495E;
 }
 
-.secondaryBlue{
+.secondaryBlue {
   fill: var(--primary-text);
+}
+
+.secondaryBg{
+  background-color: var(--secondary-bg-color);
+}
+
+.primaryBg{
+  background-color: var(--primary-bg-color);
+}
+.primaryTxt{
+  color: var(--primary-text);
+}
+
+.tertiaryBg{
+  background-color: var(--tertiary-bg-color);
+  color: var(--tertiary-text)
 }
 * {
   transition: all 0.2s ease-in-out;
@@ -45,12 +64,12 @@
 a {
   cursor: pointer;
 }
-h1{
-  @apply font-semibold
+h1 {
+  @apply font-semibold;
 }
 
 h2 {
-  @apply lg:text-[0.9rem] text-[0.8rem]
+  @apply lg:text-[0.9rem] text-[0.8rem];
 }
 
 #root {
@@ -58,18 +77,24 @@ h2 {
   @apply min-h-dvh max-w-full flex flex-col;
 }
 
-.logo1 {
-  color: var(--primary-blue);
-  @apply text-2xl font-medium;
-}
-.logo2 {
-  color: var(--pimary-orange);
-  @apply text-2xl font-medium;
-}
-
 main {
   background: var(--primary-bg-color);
   @apply grow;
+}
+
+th,
+td {
+  @apply w-1/4 text-center border-none stroke-none px-4 py-2;
+}
+
+td
+
+.logo1 {
+  color: var(--primary-blue);
+}
+
+.logo2 {
+  color: var(--pimary-orange);
 }
 
 .slow-transition * {
@@ -79,29 +104,25 @@ main {
   transition: color none;
 }
 
-.doorImg{
+.doorImg {
   fill: var(--primary-blue);
-  stroke: var(--pimary-blue)
+  stroke: var(--primary-blue);
 }
-.doorKnob{
-  stroke: var(--primary-bg-color)
+.doorKnob {
+  stroke: var(--primary-bg-color);
 }
 
 /* sudent info section */
-.studentInfo-bg{
+.studentInfo-bg {
   background: var(--secondary-bg-color);
 }
 
 /* slide-Menu */
 .slide-menu {
   background-color: var(--secondary-bg-color);
-  @apply fixed top-0 transition-transform duration-300 ease-out  w-[220px] h-[350px] rounded-bl-3xl pt-20 ;
+  @apply fixed top-0 transition-transform duration-300 ease-out  w-[220px] h-[350px] rounded-bl-3xl pt-20;
 }
 
-nav{
-  background: var(--secondary-bg-color);
-  
-}
 /* nav items */
 .nav_item {
   @apply h-fit px-7 py-3 rounded-e-[-15px] w-[90%] text-nowrap;

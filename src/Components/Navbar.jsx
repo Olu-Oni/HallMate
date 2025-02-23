@@ -94,10 +94,10 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="flex justify-between p-4 pt-6 sticky ">
+    <nav className="flex justify-between p-3 pt-4 pl-4  secondaryBg sticky ">
       <div className="flex logo">
-        <h1 className="logo1">Hall</h1>
-        <h1 className="logo2">Mate</h1>
+        <h1 className="logo1 text-2xl font-medium">Hall</h1>
+        <h1 className="logo2 text-2xl font-medium">Mate</h1>
       </div>
       <ul className="flex w-fit gap-[2%] grow text-center mx-14 md:mx-[7%] lg:mx-[12%] justify-around  max-md:hidden">
         {navNames.map((nav) => (

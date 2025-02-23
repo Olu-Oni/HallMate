@@ -4,18 +4,24 @@ import AnnouncementsPage from "./Pages/AnnouncementsPage";
 import RequestsPage from "./Pages/RequestsPage";
 import Navbar from "./Components/Navbar";
 import { createContext, useState } from "react";
+import StudentSelection from "./Pages/StudentInfoSelection";
 
 export const MyStates = createContext();
 
+// Change role to "student" if you want access to student info
+const user = {
+  role: "admin",
+};
 const student = {
-  id: "21/3188",
-  name: "Jhon Doe",
-  admin: false,
-  merits: 30,
+  displayInfo: {
+    name: "Jhon Doe",
+    id: "21/3188",
+    roomNo: "B27",
+    merits: 30,
+  },
   Personal_Info: {
     Full_Name: "Jhon Micheal Doe",
     Hall: "Bethel Splendor",
-    Room_No: "B27",
     Phone_No: "07080718065",
     Date_of_Birth: "27/Sept/2004",
     Home_Address: "Omole, Lagos",
@@ -28,7 +34,6 @@ const student = {
     Department: "information Technology",
     Faculty: "Computing and Engineering Sciences",
   },
-  
 };
 
 const App = () => {
@@ -49,6 +54,9 @@ const App = () => {
       <div className={`flex flex-col grow ${isChecked ? "dark" : "light"}`}>
         <Navbar />
         <Routes>
+          {/* <Route path="/student_info" element={user.role==="student"?<StudentInfoPage/>:<StudentSelection/>} /> */}
+          <Route path="/" element={<StudentSelection />} />
+          <Route path="/student_infoSelect" element={<StudentSelection />} />
           <Route path="/student_info" element={<StudentInfoPage />} />
           <Route path="/announcements" element={<AnnouncementsPage />} />
           <Route path="/requests" element={<RequestsPage />} />
