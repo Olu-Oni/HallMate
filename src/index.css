@@ -65,7 +65,7 @@ a {
   cursor: pointer;
 }
 h1 {
-  @apply font-semibold;
+  @apply text-2xl  font-semibold ;
 }
 
 h2 {

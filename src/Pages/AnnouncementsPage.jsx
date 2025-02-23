@@ -1,33 +1,106 @@
-import React from 'react';
+const Category = ({ category, announcements }) => {
+  return (
+    <div className="space-y-4 w-full max-w-2xl mb-14">
+      <h1>{category}</h1>
+      <div className="flex gap-6 overflow-x-auto overflow-y-hidden">
+        {announcements.map((announcement) => (
+          <Announcement announcement={announcement} />
+        ))}
+      </div>
+    </div>
+  );
+};
+const Announcement = ({ announcement }) => {
+  
+  // shortening the content of each announcement if over 110 length
+  const findNextIndex = (arr, char, start) => {
+    for (let i = start; i < arr.length; i++) {
+      if (arr[i] === char) {
+        return i;
+      }
+    }
+    return arr.length - 1;
+  };
+  const shortenedAnnouncement = (ann) => {
+    if (ann.length >= 110) {
+      const shortStart = findNextIndex(ann, " ", 110);
+      const shortenedAnnouncement = ann.slice(0, shortStart);
+      return shortenedAnnouncement + " ...";
+    } else return ann;
+  };
+  return (
+    <div
+      key={announcement.id}
+      className="p-4 border rounded shadow-sm w-96 shrink-0 h-40"
+    >
+      <h2 className="text-xl font-semibold">{announcement.title}</h2>
+      <p className="text-sm text-gray-500">{announcement.date}</p>
+      <p className="mt-2">{shortenedAnnouncement(announcement.content)}</p>
+    </div>
+  );
+};
 
 const AnnouncementsPage = () => {
+  const categories = ["Pinned", "Latest", "Security", "Shtuff"];
   const announcements = [
     {
       id: 1, // identifies the announcement
       title: "Scheduled power outage",
       date: "February 20, 2025",
-      content: "Due to maintenance on the schools generators, there will be a power outage from 11pm - 5am till further notice, Please prepare accordingly and make necessary arrangements."
+      category: "Pinned",
+      content:
+        "Due to maintenance on the schools generators, there will be a power outage from 11pm - 5am till further notice, Please prepare accordingly and make necessary arrangements.",
+    },
+    {
+      id: 1, // identifies the announcement
+      title: "Scheduled power outage",
+      date: "February 20, 2025",
+      category: "Pinned",
+      content:
+        "Due to maintenance on the schools generators, there will be a power outage from 11pm - 5am till further notice, Please prepare accordingly and make necessary arrangements.",
+    },
+    {
+      id: 1, // identifies the announcement
+      title: "Scheduled power outage",
+      date: "February 20, 2025",
+      category: "Pinned",
+      content:
+        "Due to maintenance on the schools generators, there will be a power outage from 11pm - 5am till further notice, Please prepare accordingly and make necessary arrangements.",
+    },
+    {
+      id: 1, // identifies the announcement
+      title: "Scheduled power outage",
+      date: "February 20, 2025",
+      category: "Latest",
+      content:
+        "Due to maintenance on the schools generators, there will be a power outage from 11pm - 5am till further notice, Please prepare accordingly and make necessary arrangements.",
+    },
+    {
+      id: 1, // identifies the announcement
+      title: "Scheduled power outage",
+      date: "February 20, 2025",
+      category: "Shtuff",
+      content:
+        "Due to maintenance on the schools generators, there will be a power outage from 11pm - 5am till further notice, Please prepare accordingly and make necessary arrangements.",
     },
     {
       id: 2,
       title: "Hall worship",
       date: "February 15, 2025",
-      content: "Hall worship holds every tuesday from 6:10pm - 7:10pm. Please be punctual as signing in ends by 6:25pm."
-    }
+      category: "Security",
+      content:
+        "Hall worship holds every tuesday from 6:10pm - 7:10pm. Please be punctual as signing in ends by 6:25pm.",
+    },
   ];
-
   return (
     <main className="p-8 flex flex-col items-center">
-      <h1 className="text-2xl font-bold mb-4">Announcements</h1>
-      <div className="space-y-4 w-full max-w-2xl">
-        {announcements.map((announcement) => (
-          <div key={announcement.id} className="p-4 border rounded shadow-sm">
-            <h2 className="text-xl font-semibold">{announcement.title}</h2>
-            <p className="text-sm text-gray-500">{announcement.date}</p>
-            <p className="mt-2">{announcement.content}</p>
-          </div>
-        ))}
-      </div>
+      <h1 className="mb-8">Announcements</h1>
+      {categories.map((cat) => {
+        const catAnnouncements = announcements.filter(
+          (ann) => cat === ann.category
+        );
+        return <Category category={cat} announcements={catAnnouncements} />;
+      })}
     </main>
   );
 };
