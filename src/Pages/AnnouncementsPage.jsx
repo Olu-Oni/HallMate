@@ -1,3 +1,8 @@
+// To Do
+// Remove the scroll wheel or use MUI imported components to make that easier
+
+
+//Added Categorized announcements
 const Category = ({ category, announcements }) => {
   return (
     <div className="space-y-4 w-full max-w-2xl mb-14">
@@ -41,7 +46,10 @@ const Announcement = ({ announcement }) => {
 };
 
 const AnnouncementsPage = () => {
+  //the categories can be changed once we have an idea of the different ones to use
   const categories = ["Pinned", "Latest", "Security", "Shtuff"];
+  
+  // added a bit more announcements with a new category section
   const announcements = [
     {
       id: 1, // identifies the announcement
@@ -99,6 +107,7 @@ const AnnouncementsPage = () => {
         const catAnnouncements = announcements.filter(
           (ann) => cat === ann.category
         );
+        // Category Component
         return <Category category={cat} announcements={catAnnouncements} />;
       })}
     </main>
