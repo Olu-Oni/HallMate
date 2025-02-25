@@ -3,8 +3,12 @@ import StudentInfoPage from "./Pages/StudentInfoPage";
 import AnnouncementsPage from "./Pages/AnnouncementsPage";
 import RequestsPage from "./Pages/RequestsPage";
 import Navbar from "./Components/Navbar";
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import StudentSelection from "./Pages/StudentInfoSelection";
+import { getUser } from "./services/students";
+import Login from "./Pages/Login";
+import { AuthProvider, useAuth } from "./contexts/authContext";
+import ProtectedRoute from "./Components/ProtectedRoute";
 
 export const MyStates = createContext();
 
@@ -37,9 +41,17 @@ const student = {
 };
 
 const App = () => {
+  // const { userLoggedIn } = useAuth();
   const [isChecked, setIsChecked] = useState(false);
   // false = lightmode
   // true = darkmode
+
+  // useEffect(()=>{
+  //   getUser(id)
+  //   .then((response) => setStudent(response.data))
+  //   .catch((error) => console.error("Error fetching students:", error));
+  // }, [])
+
   const toggleTheme = () => {
     setIsChecked((curr) => (curr == false ? true : false));
   };
@@ -50,20 +62,27 @@ const App = () => {
   // const myTheme= { isChecked , toggleTheme }
 
   return (
+    <AuthProvider>
+
     <MyStates.Provider value={myStates}>
       <div className={`flex flex-col grow ${isChecked ? "dark" : "light"}`}>
-        <Navbar />
         <Routes>
-          {/* <Route path="/student_info" element={user.role==="student"?<StudentInfoPage/>:<StudentSelection/>} /> */}
-          <Route path="/" element={<StudentSelection />} />
-          <Route path="/student_infoSelect" element={<StudentSelection />} />
-          <Route path="/student_info/:id" element={<StudentInfoPage />} />
-          <Route path="/announcements" element={<AnnouncementsPage />} />
-          <Route path="/requests" element={<RequestsPage />} />
-          <Route path="/login" element={<RequestsPage />} />
+            <Route path="/login" element={<Login />} />
+          <Route element={<ProtectedRoute />}>
+          <Route element={<Navbar />}>
+            {/* <Route path="/student_info" element={user.role==="student"?<StudentInfoPage/>:<StudentSelection/>} /> */}
+            <Route path="/" element={<StudentSelection />} />
+            <Route path="/student_infoSelect" element={<StudentSelection />} />
+            <Route path="/student_info/:id" element={<StudentInfoPage />} />
+            <Route path="/student_info/" element={<StudentInfoPage />} />
+            <Route path="/announcements" element={<AnnouncementsPage />} />
+            <Route path="/requests" element={<RequestsPage />} />
+          </Route>
+          </Route>
         </Routes>
       </div>
     </MyStates.Provider>
+    </AuthProvider>
   );
 };
 

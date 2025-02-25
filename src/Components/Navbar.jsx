@@ -1,18 +1,22 @@
 import { useContext, useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useParams, useNavigate } from "react-router-dom";
 import LightDarkSwitch from "./LightDarkSwitch";
 import DoorIcon from "./svg/DoorIconSVG";
 import { MyStates } from "../App";
+import { getUser } from "../services/students";
+import { doSignOut } from "../config/auth";
+import { useAuth } from "../contexts/authContext";
 // import { ReactComponent as iconDoor} from "../assets/icon_door.svg";
 
 const SlideMenu = ({ navNames, status }) => {
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const { isChecked, toggleTheme } = status;
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
-  useEffect(() => setIsOpen(true), []);
+
   return (
     <aside className="slide-menu-container md:hidden fixed top-7 right-7 z-10">
       <label
@@ -56,6 +60,10 @@ const SlideMenu = ({ navNames, status }) => {
           <Link
             to={"/login"}
             className="hover:bg-slate-900  rounded-bl-3xl px-7 w-full py-2 flex gap-2 justify-center border-t-2 absolute bottom-0 font-semibold"
+            onClick={async () => {
+              await doSignOut() // Ensure logout completes
+                .then(navigate("/login", { replace: true })); // Replace prevents back navigation
+            }}
           >
             {/* Door Icon */}
             <DoorIcon />
@@ -84,11 +92,26 @@ const NavItem = ({ nav }) => {
 
 // Main Nav Setion
 const Navbar = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const {userLoggedIn} = useAuth()
+
+  const handleLogOut = async () => {
+    try {
+      await doSignOut() // Ensure logout completes
+      .then(navigate("/login", { replace: true })); // Replace prevents back navigation
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  console.log('loggin in?', userLoggedIn)
+
   //changed the way the useContext was used for other comps. to work smoother
   const myStates = useContext(MyStates);
   const { isChecked, toggleTheme } = myStates.myTheme;
   const navNames = [
-    { loc: "student_info", name: "Student Information" },
+    { loc: `student_info/id`, name: "Student Information" },
     { loc: "requests", name: "Requests" },
     { loc: "announcements", name: "Announcements" },
   ];
@@ -113,6 +136,7 @@ const Navbar = () => {
           <Link
             to={"/login"}
             className="px-3 py-2  relative top-3 hover:bg-black hover:text-white border-2 border-black h-fit rounded-lg"
+            onClick={handleLogOut}
           >
             Log out
           </Link>

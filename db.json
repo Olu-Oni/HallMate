@@ -2,23 +2,28 @@
     "users": [
       {
         "id": 1,
-        "role": "admin"
+        "role": "admin",
+        "darkMode": "false"
       },
       {
         "id": 2,
-        "role": "student"
+        "role": "student",
+         "darkMode": "false"
       },
       {
         "id": 3,
-        "role": "student"
+        "role": "student",
+         "darkMode": "false"
       },
       {
         "id": 4,
-        "role": "student"
+        "role": "student",
+         "darkMode": "false"
       },
       {
         "id": 5,
-        "role": "student"
+        "role": "student",
+         "darkMode": "false"
       }
     ],
     "students": [
@@ -31,19 +36,19 @@
           "merits": 30
         },
         "personalInfo": {
-          "fullName": "Jhon Micheal Doe",
-          "hall": "Bethel Splendor",
-          "phoneNo": "07080718065",
-          "dateOfBirth": "27/Sept/2004",
-          "homeAddress": "Omole, Lagos",
-          "state": "Ekiti",
-          "religion": "Christian",
-          "nationality": "Nigerian"
+          "Full_Name": "Jhon Micheal Doe",
+          "Hall": "Bethel Splendor",
+          "Phone_No": "07080718065",
+          "Date_of_Birth": "27/Sept/2004",
+          "Home_Address": "Omole, Lagos",
+          "State": "Ekiti",
+          "Religion": "Christian",
+          "Nationality": "Nigerian"
         },
         "academicInfo": {
-          "courseOfStudy": "Information Technology",
-          "department": "Information Technology",
-          "faculty": "Computing and Engineering Sciences"
+          "Course_of_Study": "Information Technology",
+          "Department": "Information Technology",
+          "Faculty": "Computing and Engineering Sciences"
         }
       },
       {
