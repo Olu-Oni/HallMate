@@ -1,9 +1,11 @@
 import { useContext } from "react";
 import UserCircle from "../Components/svg/UserCircle";
 import { MyStates } from "../App";
+import { useParams } from "react-router-dom";
 
 const StudentInfoPage = () => {
   const { student } = useContext(MyStates);
+  const { id } = useParams();
 
   const meritColor = (point) => {
     if (point <= -30) return "text-red-600";
@@ -17,7 +19,7 @@ const StudentInfoPage = () => {
           <UserCircle />
           <div className="self-center">
             <h1>Name: {student.displayInfo.name}</h1>
-            <h1>Student ID: {student.displayInfo.id}</h1>
+            <h1>Student ID: {student.displayInfo.matrNo}</h1>
           </div>
           <div className="flex-grow flex justify-center text-[1.2rem]">
             <h1 className=" text-[1.2rem] mr-2">Merits Points:</h1>

@@ -5,7 +5,7 @@
 //Added Categorized announcements
 const Category = ({ category, announcements }) => {
   return (
-    <div className="space-y-4 w-full max-w-2xl mb-14">
+    <div className="space-y-4 w-full mb-14">
       <h1>{category}</h1>
       <div className="flex gap-6 overflow-x-auto overflow-y-hidden">
         {announcements.map((announcement) => (
@@ -30,13 +30,13 @@ const Announcement = ({ announcement }) => {
     if (ann.length >= 110) {
       const shortStart = findNextIndex(ann, " ", 110);
       const shortenedAnnouncement = ann.slice(0, shortStart);
-      return shortenedAnnouncement + " ...";
+      return shortenedAnnouncement + "  . . .";
     } else return ann;
   };
   return (
     <div
       key={announcement.id}
-      className="p-4 border rounded shadow-sm w-96 shrink-0 h-40"
+      className="p-4 border rounded shadow-sm w-96 shrink-0 h-40 secondaryBg"
     >
       <h2 className="text-xl font-semibold">{announcement.title}</h2>
       <p className="text-sm text-gray-500">{announcement.date}</p>
@@ -101,7 +101,7 @@ const AnnouncementsPage = () => {
     },
   ];
   return (
-    <main className="p-8 flex flex-col items-center">
+    <main className="p-8 flex flex-col items-center md:px-20 sm:px-14">
       <h1 className="mb-8">Announcements</h1>
       {categories.map((cat) => {
         const catAnnouncements = announcements.filter(

@@ -15,7 +15,7 @@ const user = {
 const student = {
   displayInfo: {
     name: "Jhon Doe",
-    id: "21/3188",
+    matrNo: "21/3188",
     roomNo: "B27",
     merits: 30,
   },
@@ -57,7 +57,7 @@ const App = () => {
           {/* <Route path="/student_info" element={user.role==="student"?<StudentInfoPage/>:<StudentSelection/>} /> */}
           <Route path="/" element={<StudentSelection />} />
           <Route path="/student_infoSelect" element={<StudentSelection />} />
-          <Route path="/student_info" element={<StudentInfoPage />} />
+          <Route path="/student_info/:id" element={<StudentInfoPage />} />
           <Route path="/announcements" element={<AnnouncementsPage />} />
           <Route path="/requests" element={<RequestsPage />} />
           <Route path="/login" element={<RequestsPage />} />

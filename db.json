@@ -1,0 +1,148 @@
+{
+    "users": [
+      {
+        "id": 1,
+        "role": "admin"
+      },
+      {
+        "id": 2,
+        "role": "student"
+      },
+      {
+        "id": 3,
+        "role": "student"
+      },
+      {
+        "id": 4,
+        "role": "student"
+      },
+      {
+        "id": 5,
+        "role": "student"
+      }
+    ],
+    "students": [
+      {
+        "id": 1,
+        "displayInfo": {
+          "name": "Jhon Doe",
+          "matrNo": "21/3188",
+          "roomNo": "B27",
+          "merits": 30
+        },
+        "personalInfo": {
+          "fullName": "Jhon Micheal Doe",
+          "hall": "Bethel Splendor",
+          "phoneNo": "07080718065",
+          "dateOfBirth": "27/Sept/2004",
+          "homeAddress": "Omole, Lagos",
+          "state": "Ekiti",
+          "religion": "Christian",
+          "nationality": "Nigerian"
+        },
+        "academicInfo": {
+          "courseOfStudy": "Information Technology",
+          "department": "Information Technology",
+          "faculty": "Computing and Engineering Sciences"
+        }
+      },
+      {
+        "id": 2,
+        "displayInfo": {
+          "name": "Alice Johnson",
+          "matrNo": "21/3190",
+          "roomNo": "C12",
+          "merits": 25
+        },
+        "personalInfo": {
+          "fullName": "Alice Maria Johnson",
+          "hall": "Bethel Grace",
+          "phoneNo": "08091234567",
+          "dateOfBirth": "12/May/2003",
+          "homeAddress": "Ikeja, Lagos",
+          "state": "Lagos",
+          "religion": "Christian",
+          "nationality": "Nigerian"
+        },
+        "academicInfo": {
+          "courseOfStudy": "Software Engineering",
+          "department": "Software Engineering",
+          "faculty": "Computing and Engineering Sciences"
+        }
+      },
+      {
+        "id": 3,
+        "displayInfo": {
+          "name": "Emeka Obi",
+          "matrNo": "21/3221",
+          "roomNo": "A45",
+          "merits": 40
+        },
+        "personalInfo": {
+          "fullName": "Emeka Chinedu Obi",
+          "hall": "Alpha Hall",
+          "phoneNo": "08134567890",
+          "dateOfBirth": "05/Nov/2002",
+          "homeAddress": "Onitsha, Anambra",
+          "state": "Anambra",
+          "religion": "Christian",
+          "nationality": "Nigerian"
+        },
+        "academicInfo": {
+          "courseOfStudy": "Cybersecurity",
+          "department": "Cybersecurity",
+          "faculty": "Computing and Engineering Sciences"
+        }
+      },
+      {
+        "id": 4,
+        "displayInfo": {
+          "name": "Fatima Bello",
+          "matrNo": "21/3255",
+          "roomNo": "D20",
+          "merits": 35
+        },
+        "personalInfo": {
+          "fullName": "Fatima Aisha Bello",
+          "hall": "Omega Hall",
+          "phoneNo": "07023456789",
+          "dateOfBirth": "14/Jan/2004",
+          "homeAddress": "Kaduna, Kaduna",
+          "state": "Kaduna",
+          "religion": "Muslim",
+          "nationality": "Nigerian"
+        },
+        "academicInfo": {
+          "courseOfStudy": "Computer Science",
+          "department": "Computer Science",
+          "faculty": "Computing and Engineering Sciences"
+        }
+      },
+      {
+        "id": 5,
+        "displayInfo": {
+          "name": "David Okon",
+          "matrNo": "21/3277",
+          "roomNo": "E33",
+          "merits": 28
+        },
+        "personalInfo": {
+          "fullName": "David Ini Okon",
+          "hall": "Victory Hall",
+          "phoneNo": "09087654321",
+          "dateOfBirth": "20/Jul/2003",
+          "homeAddress": "Uyo, Akwa Ibom",
+          "state": "Akwa Ibom",
+          "religion": "Christian",
+          "nationality": "Nigerian"
+        },
+        "academicInfo": {
+          "courseOfStudy": "Compuer information Systems",
+          "department": "Computer Science",
+          "faculty": "Computing and Engineering Sciences"
+        }
+      }
+    ]
+    
+  }
+  
