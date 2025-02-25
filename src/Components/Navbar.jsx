@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { Link, useLocation, useParams, useNavigate } from "react-router-dom";
+import { Link, useLocation, useParams, useNavigate, Outlet } from "react-router-dom";
 import LightDarkSwitch from "./LightDarkSwitch";
 import DoorIcon from "./svg/DoorIconSVG";
 import { MyStates } from "../App";
@@ -117,6 +117,8 @@ const Navbar = () => {
   ];
 
   return (
+    <>
+
     <nav className="flex justify-between p-3 pt-4 pl-4  secondaryBg sticky ">
       <div className="flex logo">
         <h1 className="logo1 text-2xl font-medium">Hall</h1>
@@ -145,6 +147,10 @@ const Navbar = () => {
 
       <SlideMenu navNames={navNames} status={{ isChecked, toggleTheme }} />
     </nav>
+
+    {/* to allow the other components show */}
+    <Outlet />
+    </>
   );
 };
 
