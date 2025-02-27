@@ -7,7 +7,7 @@ const Category = ({ category, announcements }) => {
   return (
     <div className="space-y-4 w-full mb-14">
       <h1>{category}</h1>
-      <div className="flex gap-6 overflow-x-auto overflow-y-hidden">
+      <div className="flex gap-6 overflow-x-auto overflow-y-hidden scrollbar-hide ">
         {announcements.map((announcement) => (
           <Announcement announcement={announcement} />
         ))}

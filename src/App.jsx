@@ -1,14 +1,25 @@
-import { Route, Routes } from "react-router-dom";
-import StudentInfoPage from "./Pages/StudentInfoPage";
-import AnnouncementsPage from "./Pages/AnnouncementsPage";
-import RequestsPage from "./Pages/RequestsPage";
+import { Navigate, Route, Routes } from "react-router-dom";
+import StudentInfoPage from "./Pages/Student/StudentInfoPage";
+import AnnouncementsPage from "./Pages/Student/AnnouncementsPage";
+import RequestsPage from "./Pages/Student/RequestsPage";
 import Navbar from "./Components/Navbar";
 import { createContext, useEffect, useState } from "react";
-import StudentSelection from "./Pages/StudentInfoSelection";
+import StudentSelection from "./Pages/Admin/StudentInfoSelection";
 import { getUser } from "./services/students";
 import Login from "./Pages/Login";
 import { AuthProvider, useAuth } from "./contexts/authContext";
-import ProtectedRoute from "./Components/ProtectedRoute";
+import {
+  AdminRoutes,
+  LogInRoute,
+  StudentRoutes,
+} from "./Routes/ProtectedRoute";
+import RequestsManagementPage from "./Pages/Admin/RequestsPage";
+import AnnouncementsManagementPage from "./Pages/Admin/AnnouncementsPage";
+import StudentInfoManagementPage from "./Pages/Admin/StudentInfoPage";
+import StudentInfoSelection from "./Pages/Admin/StudentInfoSelection";
+import NotFound from "./Pages/NotFound";
+import StudentNavbar from "./Pages/Student/StudentNavbar";
+import AdminNavbar from "./Pages/Admin/AdminNavbar";
 
 export const MyStates = createContext();
 
@@ -41,8 +52,10 @@ const student = {
 };
 
 const App = () => {
-  // const { userLoggedIn } = useAuth();
+  const { userLoggedIn, currentUser } = useAuth();
   const [isChecked, setIsChecked] = useState(false);
+  const [userInfo, setUserInfo] = useState({});
+  // const {userLoggedIn} = useAuth()
   // false = lightmode
   // true = darkmode
 
@@ -51,6 +64,12 @@ const App = () => {
   //   .then((response) => setStudent(response.data))
   //   .catch((error) => console.error("Error fetching students:", error));
   // }, [])
+
+  useEffect(() => {
+    if (userLoggedIn) {
+      getUser(currentUser.uid).then((response) => setUserInfo(response));
+    }
+  }, [userLoggedIn]);
 
   const toggleTheme = () => {
     setIsChecked((curr) => (curr == false ? true : false));
@@ -62,27 +81,60 @@ const App = () => {
   // const myTheme= { isChecked , toggleTheme }
 
   return (
-    <AuthProvider>
-
     <MyStates.Provider value={myStates}>
       <div className={`flex flex-col grow ${isChecked ? "dark" : "light"}`}>
         <Routes>
-            <Route path="/login" element={<Login />} />
-          {/* <Route element={<ProtectedRoute />}> */}
-          <Route element={<Navbar />}>
-            {/* <Route path="/student_info" element={user.role==="student"?<StudentInfoPage/>:<StudentSelection/>} /> */}
-            <Route path="/" element={<StudentSelection />} />
-            <Route path="/student_infoSelect" element={<StudentSelection />} />
-            <Route path="/student_info/:id" element={<StudentInfoPage />} />
-            <Route path="/student_info/" element={<StudentInfoPage />} />
-            <Route path="/announcements" element={<AnnouncementsPage />} />
-            <Route path="/requests" element={<RequestsPage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/NotFound" element={<NotFound />} />
+
+          {/* Protected Routes */}
+          <Route element={<LogInRoute />}>
+            {/* Student Routes */}
+            <Route element={<StudentRoutes role={userInfo?.role} />}>
+              {/* Comment out from here to the protected routes comment if you dont want disturbances */}
+              <Route element={<StudentNavbar />}>
+                <Route path="/" element={<StudentSelection />} />
+                <Route
+                  path="/student-student_info/"
+                  element={<StudentInfoPage />}
+                />
+                <Route
+                  path="/student-announcements"
+                  element={<AnnouncementsPage />}
+                />
+                <Route path="/student-requests" element={<RequestsPage />} />
+              </Route>
+            </Route>
+
+            {/* Admin Routes */}
+            <Route element={<AdminRoutes role={userInfo?.role} />}>
+              <Route element={<AdminNavbar />}>
+                <Route
+                  path="/admin-student_infoSelect"
+                  element={<StudentInfoSelection />}
+                />
+                <Route
+                  path="/admin-student_info/"
+                  element={<StudentInfoManagementPage />}
+                />
+                <Route
+                  path="/admin-announcements"
+                  element={<AnnouncementsManagementPage />}
+                />
+                <Route
+                  path="/admin-requests"
+                  element={<RequestsManagementPage />}
+                />
+              </Route>
+
+              {/* Comment these two route tags under as well */}
+            </Route>
           </Route>
-          {/* </Route> */}
+          {/* Catch-All Route for Unknown Pages */}
+          <Route path="*" element={<Navigate to="/NotFound" replace />} />
         </Routes>
       </div>
     </MyStates.Provider>
-    </AuthProvider>
   );
 };
 

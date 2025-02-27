@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from "react";
-import UserCircle from "../Components/svg/UserCircle";
-import { MyStates } from "../App";
+import UserCircle from "../../Components/svg/UserCircle";
+import { MyStates } from "../../App";
 import { useParams } from "react-router-dom";
-import { getStudent } from "../services/students";
-import { useAuth } from "../contexts/authContext";
+import { getStudent } from "../../services/students";
+import { useAuth } from "../../contexts/authContext";
 
 const StudentInfoPage = () => {
   const [student, setStudent] = useState();

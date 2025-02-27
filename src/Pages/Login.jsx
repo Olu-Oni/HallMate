@@ -53,9 +53,9 @@ const Login = () => {
     <>
       {userLoggedIn &&
         (userInfo.role === "admin" ? (
-          <Navigate to="/student_infoSelect" replace={true} />
+          <Navigate to="/admin-student_infoSelect" replace={true} />
         ) : userInfo.role === "student" ? (
-          <Navigate to="/student_info/" replace={true} />
+          <Navigate to="/student-student_info/" replace={true} />
         ) : null)}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 h-screen w-full primaryBg">

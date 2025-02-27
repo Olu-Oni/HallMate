@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
-import { MyStates } from "../App";
+import { MyStates } from "../../App";
 import { Link } from "react-router-dom";
-import { getAllStudents } from "../services/students";
+import { getAllStudents } from "../../services/students";
 
 const StudentRow = ({ student, position, id }) => {
   const isEven = position % 2 === 0;
@@ -71,7 +71,7 @@ const StudentList = ({ students }) => {
   );
 };
 
-const StudentSelection = () => {
+const StudentInfoSelection = () => {
   // const { student } = useContext(MyStates);
   const [students, setStudents] = useState([]);
   const [searchText, setSearchText] = useState("");
@@ -145,4 +145,4 @@ const StudentSelection = () => {
   );
 };
 
-export default StudentSelection;
+export default StudentInfoSelection;
