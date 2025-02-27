@@ -59,7 +59,7 @@ const SlideMenu = ({ navNames, status }) => {
 
           <Link
             to={"/login"}
-            className="hover:bg-slate-900  rounded-bl-3xl px-7 w-full py-2 flex gap-2 justify-center border-t-2 absolute bottom-0 font-semibold"
+            className="hover:backdrop-brightness-75 rounded-bl-3xl px-7 w-full py-2 flex gap-2 justify-center border-t-2 absolute bottom-0 font-semibold"
             onClick={async () => {
               await doSignOut() // Ensure logout completes
                 .then(navigate("/login", { replace: true })); // Replace prevents back navigation
@@ -80,7 +80,7 @@ const NavItem = ({ nav }) => {
   return (
     <li
       className={
-        location.pathname === `/${nav.loc}` ? "active nav_item" : "nav_item "
+        location.pathname === `/${nav.loc}` ? "active nav_item " : "nav_item "
       }
     >
       <Link to={`/${nav.loc}`}>
@@ -105,7 +105,7 @@ const Navbar = () => {
     }
   };
 
-  console.log('loggin in?', userLoggedIn)
+  console.log('logged in?', userLoggedIn)
 
   //changed the way the useContext was used for other comps. to work smoother
   const myStates = useContext(MyStates);

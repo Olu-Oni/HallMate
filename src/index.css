@@ -129,7 +129,7 @@ td
 }
 @media not all and (min-width: 768px) {
   .nav_item:hover {
-    background-color: var(--secondary-orange);
+    background-color: var(--primary-bg-color);
     transition: color none;
     @apply translate-x-[.5em];
   }
@@ -137,7 +137,7 @@ td
 .active {
   transition: color none;
   text-decoration: underline var(--pimary-orange) 1.75px;
-  @apply underline-offset-8;
+  @apply underline-offset-8 ;
 }
 
 /* burger */

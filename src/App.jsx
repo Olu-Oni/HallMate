@@ -68,7 +68,7 @@ const App = () => {
       <div className={`flex flex-col grow ${isChecked ? "dark" : "light"}`}>
         <Routes>
             <Route path="/login" element={<Login />} />
-          <Route element={<ProtectedRoute />}>
+          {/* <Route element={<ProtectedRoute />}> */}
           <Route element={<Navbar />}>
             {/* <Route path="/student_info" element={user.role==="student"?<StudentInfoPage/>:<StudentSelection/>} /> */}
             <Route path="/" element={<StudentSelection />} />
@@ -78,7 +78,7 @@ const App = () => {
             <Route path="/announcements" element={<AnnouncementsPage />} />
             <Route path="/requests" element={<RequestsPage />} />
           </Route>
-          </Route>
+          {/* </Route> */}
         </Routes>
       </div>
     </MyStates.Provider>

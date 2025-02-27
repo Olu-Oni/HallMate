@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import loginImg from "../assets/userStudent.png";
 import { useAuth } from "../contexts/authContext";
 import {
@@ -6,11 +6,13 @@ import {
   doSignInWithGoogle,
 } from "../config/auth";
 import { Navigate } from "react-router-dom";
+import { getUser } from "../services/students";
 
 const Login = () => {
   const { userLoggedIn, currentUser } = useAuth();
   const [isSigningIn, setIsSigningIn] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [userInfo, setUserInfo] = useState({});
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,10 +24,20 @@ const Login = () => {
         setIsSigningIn(true);
         await doSignInUserWithEmailAndPassword(email, password);
       } catch (err) {
-        console.error("login error",err);
+        console.error("login error", err);
+        setErrorMessage("Invalid email or password. Please try again."); // Display error message
+        setIsSigningIn(false);
       }
     }
   };
+
+  useEffect(() => {
+    if (userLoggedIn) {
+      getUser(currentUser.uid).then((response) => setUserInfo(response));
+    }
+  }, [userLoggedIn]);
+
+  // console.log(userInfo.role)
   currentUser ? console.log(currentUser) : null;
 
   const googleSignIn = (e) => {
@@ -39,10 +51,14 @@ const Login = () => {
   };
   return (
     <>
-      {userLoggedIn && (
-        <Navigate to={`/student_info/${currentUser.uid}`} replace={true} />
-      )}
-      <div className="grid grid-cols-1 sm:grid-cols-2 h-screen w-full">
+      {userLoggedIn &&
+        (userInfo.role === "admin" ? (
+          <Navigate to="/student_infoSelect" replace={true} />
+        ) : userInfo.role === "student" ? (
+          <Navigate to="/student_info/" replace={true} />
+        ) : null)}
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 h-screen w-full primaryBg">
         <div className="hidden sm:block text-center w-fit m-auto">
           <img className="" src={loginImg} alt="" />
           {/* Student */}
@@ -79,11 +95,17 @@ const Login = () => {
             <p>Forgot Password</p> */}
             </div>
             <button
-              className="w-full my-5 py-2 border-2 border-gray-200 hover:border-black hover:bg-black hover:text-white font-semibold rounded-lg"
+              className={`w-full my-5 py-2 border-2 border-gray-200 hover:border-black hover:bg-black hover:text-white font-semibold rounded-lg ${
+                isSigningIn ? "opacity-50 cursor-not-allowed" : ""
+              }`}
               type="submit"
+              disabled={isSigningIn} // Disable only when processing
             >
-              SIGN IN
+              {isSigningIn ? "Signing In..." : "SIGN IN"}
             </button>
+            {errorMessage && (
+              <p className="text-red-500 text-center mt-2">{errorMessage}</p>
+            )}
           </form>
         </div>
       </div>

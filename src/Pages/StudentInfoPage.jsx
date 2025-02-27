@@ -3,19 +3,23 @@ import UserCircle from "../Components/svg/UserCircle";
 import { MyStates } from "../App";
 import { useParams } from "react-router-dom";
 import { getStudent } from "../services/students";
+import { useAuth } from "../contexts/authContext";
 
 const StudentInfoPage = () => {
   const [student, setStudent] = useState();
-  const { id } = useParams();
+  const {currentUser} = useAuth()
+  console.log(currentUser.uid)
+
+  // const { id } = useParams();
 
   useEffect(() => {
-    getStudent(id)
-      .then((response) => setStudent(response.data))
+    getStudent(currentUser.uid)
+      .then((response) => setStudent(response))
       .catch((error) => console.error("Error fetching students:", error));
   }, []);
-
+  console.log(student)
   // console.log(student.Personal_Info);
-  console.log(id);
+  // console.log(id);
   const meritColor = (point) => {
     if (point <= -30) return "text-red-600";
     else if (point <= -10) return "text-orange-500";

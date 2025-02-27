@@ -82,43 +82,6 @@ const StudentSelection = () => {
       .catch((error) => console.error("Error fetching students:", error));
   }, []);
   
-  // TO BE DELETED
-  // const studentDisp = student.displayInfo;
-  // **Ensure unique objects in students array**
-  // const students = [
-  //   {
-  //     ...studentDisp,
-  //     name: "John Bosco",
-  //     matrNo: "21/1111",
-  //     uID: "211111",
-  //     roomNo: "A1",
-  //     merits: 5,
-  //   },
-  //   {
-  //     ...studentDisp,
-  //     name: "Wowwww Mennington",
-  //     matrNo: "21/2222",
-  //     uID: "212222",
-  //     roomNo: "B2",
-  //     merits: 10,
-  //   },
-  //   {
-  //     ...studentDisp,
-  //     name: "Jonathan Boskoko",
-  //     matrNo: "21/3333",
-  //     uID: "213333",
-  //     roomNo: "C3",
-  //     merits: 7,
-  //   },
-  //   {
-  //     ...studentDisp,
-  //     name: "Wowwww Again Mennington",
-  //     matrNo: "21/4444",
-  //     uID: "214444",
-  //     roomNo: "D4",
-  //     merits: 8,
-  //   },
-  // ];
 
   // **Search Filter**
   const searchedStudents = students
