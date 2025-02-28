@@ -94,11 +94,14 @@ const NavItem = ({ nav }) => {
 const AdminNavbar = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const {userLoggedIn} = useAuth()
+  const {userLoggedIn} = useAuth();
+  const myStates = useContext(MyStates);
+  const {userInfo, setUserInfo} = myStates.user
 
   const handleLogOut = async () => {
     try {
       await doSignOut() // Ensure logout completes
+      .then(setUserInfo({}))
       .then(navigate("/login", { replace: true })); // Replace prevents back navigation
     } catch (err) {
       console.error(err);
@@ -108,7 +111,6 @@ const AdminNavbar = () => {
   console.log('logged in?', userLoggedIn)
 
   //changed the way the useContext was used for other comps. to work smoother
-  const myStates = useContext(MyStates);
   const { isChecked, toggleTheme } = myStates.myTheme;
   const navNames = [
     { loc: `student_infoSelect`, name: "Student Information" },

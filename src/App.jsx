@@ -66,10 +66,16 @@ const App = () => {
   // }, [])
 
   useEffect(() => {
-    if (userLoggedIn) {
+    if (userLoggedIn && currentUser) {
+      setUserInfo({})
+      console.log('obtaining from app')
       getUser(currentUser.uid).then((response) => setUserInfo(response));
     }
-  }, [userLoggedIn]);
+    else{
+      setUserInfo({})
+      console.log('logged out plx')
+    }
+  }, [userLoggedIn, currentUser]);
 
   const toggleTheme = () => {
     setIsChecked((curr) => (curr == false ? true : false));
@@ -77,6 +83,7 @@ const App = () => {
   const myStates = {
     myTheme: { isChecked, toggleTheme },
     student,
+    user: {userInfo , setUserInfo},
   };
   // const myTheme= { isChecked , toggleTheme }
 
@@ -114,7 +121,7 @@ const App = () => {
                   element={<StudentInfoSelection />}
                 />
                 <Route
-                  path="/admin-student_info/"
+                  path="/admin-student_info/:id"
                   element={<StudentInfoManagementPage />}
                 />
                 <Route

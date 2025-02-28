@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { getAllStudents } from "../../services/students";
 
 const StudentRow = ({ student, position, id }) => {
+
   const isEven = position % 2 === 0;
   return (
     <tr>
@@ -22,7 +23,7 @@ const StudentRow = ({ student, position, id }) => {
       {Object.entries(student).map(([key, value]) => (
         <td key={key} className="p-0">
           <Link
-            to={`/student_info/${id}`}
+            to={`/admin-student_info/${id}`}
             className={`block w-full h-full primaryTxt py-[6px] text-[.85rem] ${
               isEven ? "secondaryBg " : "primaryBg "
             }`}
@@ -78,9 +79,11 @@ const StudentInfoSelection = () => {
 
   useEffect(() => {
     getAllStudents()
-      .then((response) => setStudents(response.data))
+      .then((response) => setStudents(response))
       .catch((error) => console.error("Error fetching students:", error));
   }, []);
+
+  console.log(students)
   
 
   // **Search Filter**

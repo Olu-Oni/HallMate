@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import loginImg from "../assets/userStudent.png";
 import { useAuth } from "../contexts/authContext";
 import {
@@ -7,12 +7,14 @@ import {
 } from "../config/auth";
 import { Navigate } from "react-router-dom";
 import { getUser } from "../services/students";
+import { MyStates } from "../App";
 
 const Login = () => {
   const { userLoggedIn, currentUser } = useAuth();
   const [isSigningIn, setIsSigningIn] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [userInfo, setUserInfo] = useState({});
+  const myStates = useContext(MyStates);
+  const {userInfo, setUserInfo} = myStates.user
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,6 +25,7 @@ const Login = () => {
       try {
         setIsSigningIn(true);
         await doSignInUserWithEmailAndPassword(email, password);
+        console.log('somm going on here too')
       } catch (err) {
         console.error("login error", err);
         setErrorMessage("Invalid email or password. Please try again."); // Display error message
@@ -32,13 +35,19 @@ const Login = () => {
   };
 
   useEffect(() => {
-    if (userLoggedIn) {
+    if (userLoggedIn && currentUser && userInfo) {
+      console.log('obtaining from login')
       getUser(currentUser.uid).then((response) => setUserInfo(response));
+      console.log('somm going on here')
     }
-  }, [userLoggedIn]);
+    else{
+      setUserInfo({})
+      console.log('logged out *2')
+    }
+  }, [userLoggedIn, currentUser]);
 
   // console.log(userInfo.role)
-  currentUser ? console.log(currentUser) : null;
+  // currentUser ? console.log(currentUser) : null;
 
   const googleSignIn = (e) => {
     e.preventDefault();
@@ -49,8 +58,10 @@ const Login = () => {
       });
     }
   };
+  console.log(userInfo.role)
+  console.log(userLoggedIn)
   return (
-    <>
+    <main>
       {userLoggedIn &&
         (userInfo.role === "admin" ? (
           <Navigate to="/admin-student_infoSelect" replace={true} />
@@ -58,13 +69,13 @@ const Login = () => {
           <Navigate to="/student-student_info/" replace={true} />
         ) : null)}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 h-screen w-full primaryBg">
-        <div className="hidden sm:block text-center w-fit m-auto">
+      <div className="flex items-center justify-center gap-14 h-screen w-full primaryBg">
+        <div className="hidden sm:block text-center w-fit ">
           <img className="" src={loginImg} alt="" />
           {/* Student */}
         </div>
 
-        <div className=" flex flex-col justify-center mr-5">
+        <div className=" flex flex-col justify-center mr-5 basis-[40%]">
           <form
             className="max-w-[400px] w-full mx-auto rounded-lg border-2 border-gray-200 p-8 px-8"
             onSubmit={handleSubmit}
@@ -109,7 +120,7 @@ const Login = () => {
           </form>
         </div>
       </div>
-    </>
+    </main>
   );
 };
 
