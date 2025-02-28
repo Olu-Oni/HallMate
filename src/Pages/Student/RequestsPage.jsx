@@ -1,63 +1,100 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useAuth } from '../../contexts/authContext';
+import { getStudent } from '../../services/students';
 
 const RequestsPage = () => {
-  // variables to manage the student requests
-  const [roomNumber, setRoomNumber] = useState('');
-  const [amenity, setAmenity] = useState('');
-  const [issue, setIssue] = useState('');
-  const [otherIssue, setOtherIssue] = useState('');
+  // Manage the student state
+  const [student, setStudent] = useState(null);
+  const { currentUser } = useAuth();
+
+  useEffect(() => {
+    if (currentUser?.uid) {
+      getStudent(currentUser.uid)
+        .then((response) => setStudent(response))
+        .catch((error) => console.error("Error fetching student:", error));
+    }
+  }, [currentUser?.uid]); // Ensure it runs when currentUser changes
+
+  // State for new maintenance request
+  const [newRequest, setNewRequest] = useState({
+    roomNo: "",
+    amenity: "",
+    issue: "",
+    otherIssue: "",
+    status: "Pending",
+  });
+
+  // Update newRequest when student is fetched
+  useEffect(() => {
+    if (student) {
+      setNewRequest((prev) => ({
+        ...prev,
+        roomNo: student.displayInfo?.roomNo || "",
+      }));
+    }
+  }, [student]);
+
+  const resetNewRequest = () => {
+    setNewRequest({
+      roomNo: student?.displayInfo?.roomNo || "",
+      amenity: "",
+      issue: "",
+      otherIssue: "",
+      status: "Pending",
+    });
+  };
+
+  // Existing requests (temporary example data)
   const [requests, setRequests] = useState([
     {
       id: 1,
-      roomNumber: '101',
-      amenity: 'electrical',
-      issue: 'light bulbs',
-      status: 'In Progress'
+      roomNumber: "101",
+      amenity: "electrical",
+      issue: "light bulbs",
+      status: "In Progress",
     },
     {
       id: 2,
-      roomNumber: '202',
-      amenity: 'plumbing',
-      issue: 'tap',
-      status: 'Completed'
-    }
+      roomNumber: "202",
+      amenity: "plumbing",
+      issue: "tap",
+      status: "Completed",
+    },
   ]);
 
-  // for submission of the request
+  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-    const newRequest = {
+
+    const newEntry = {
       id: requests.length + 1,
-      roomNumber,
-      amenity,
-      issue: amenity === 'others' ? otherIssue : issue,
-      status: 'Pending'
+      roomNumber: newRequest.roomNo,
+      amenity: newRequest.amenity,
+      issue: newRequest.amenity === "others" ? newRequest.otherIssue : newRequest.issue,
+      status: "Pending",
     };
-    // to add new request to the list of requests
-    setRequests([...requests, newRequest]);
-    // Reset form inputs
-    setRoomNumber('');
-    setAmenity('');
-    setIssue('');
-    setOtherIssue('');
-    console.log('Request submitted:', newRequest);
-    // Here we add the code to send the request to the hall admin
+
+    setRequests([...requests, newEntry]); // Update request list
+    resetNewRequest(); // Reset form
+    console.log("Request submitted:", newEntry);
+
+    // TODO: Send request to the hall admin (API call)
   };
 
   const issues = {
-    electrical: ['fans', 'sockets', 'light bulbs'],
-    plumbing: ['Wash hand basin', 'Shower', 'Tap', 'Wc'],
-    carpentry: ['Broken beds', 'Damaged lockers', 'Damaged doors'],
+    electrical: ["Fans", "Sockets", "Light bulbs"],
+    plumbing: ["Wash hand basin", "Shower", "Tap", "WC"],
+    carpentry: ["Broken beds", "Damaged lockers", "Damaged doors"],
   };
 
-  // progress bar
+  // Progress bar function
   const getStatusProgress = (status) => {
     switch (status) {
-      case 'Pending':
+      case "Pending":
         return 25;
-      case 'In Progress':
+      case "In Progress":
         return 50;
-      case 'Completed':
+      case "Completed":
         return 100;
       default:
         return 0;
@@ -67,32 +104,12 @@ const RequestsPage = () => {
   return (
     <main className="p-8">
       <h1 className="text-2xl font-bold mb-4">Maintenance Requests</h1>
-      
-      {/* Existing Requests */}
-      <section className="mb-8">
-        <h2 className="text-xl font-semibold mb-4">Existing Requests</h2>
-        <div className="space-y-4">
-          {requests.map((request) => (
-            <div key={request.id} className="p-4 border rounded shadow-sm">
-              <p><strong>Room Number:</strong> {request.roomNumber}</p>
-              <p><strong>Amenity:</strong> {request.amenity}</p>
-              <p><strong>Issue:</strong> {request.issue}</p>
-              <p><strong>Status:</strong> {request.status}</p>
-              <div className="w-full bg-gray-200 rounded-full h-4 mt-2">
-                <div
-                  className={`h-4 rounded-full ${request.status === 'Completed' ? 'bg-green-500' : 'bg-blue-500'}`}
-                  style={{ width: `${getStatusProgress(request.status)}%` }}
-                ></div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
 
       {/* New Request Form */}
       <section>
         <h2 className="text-xl font-semibold mb-4">New Request</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Room Number */}
           <div>
             <label htmlFor="roomNumber" className="block text-sm font-medium text-gray-700">
               Room Number
@@ -100,21 +117,22 @@ const RequestsPage = () => {
             <input
               type="text"
               id="roomNumber"
-              value={roomNumber}
-              onChange={(e) => setRoomNumber(e.target.value)}
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-              required
+              value={newRequest.roomNo}
+              disabled
+              className="mt-1 block w-24 border border-gray-300 rounded-md shadow-sm p-2"
             />
           </div>
+
+          {/* Amenity Selection */}
           <div>
             <label htmlFor="amenity" className="block text-sm font-medium text-gray-700">
               Amenity
             </label>
             <select
               id="amenity"
-              value={amenity}
-              onChange={(e) => setAmenity(e.target.value)}
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+              value={newRequest.amenity}
+              onChange={(e) => setNewRequest({ ...newRequest, amenity: e.target.value, issue: "" })}
+              className="mt-1 block pr-20 border border-gray-300 rounded-md shadow-sm p-2"
               required
             >
               <option value="">Select an amenity</option>
@@ -124,20 +142,22 @@ const RequestsPage = () => {
               <option value="others">Others</option>
             </select>
           </div>
-          {amenity && amenity !== 'others' && (
+
+          {/* Issue Selection (if not 'others') */}
+          {newRequest.amenity && newRequest.amenity !== "others" && (
             <div>
               <label htmlFor="issue" className="block text-sm font-medium text-gray-700">
                 Issue
               </label>
               <select
                 id="issue"
-                value={issue}
-                onChange={(e) => setIssue(e.target.value)}
+                value={newRequest.issue}
+                onChange={(e) => setNewRequest({ ...newRequest, issue: e.target.value })}
                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                 required
               >
                 <option value="">Select an issue</option>
-                {issues[amenity].map((issue) => (
+                {issues[newRequest.amenity].map((issue) => (
                   <option key={issue} value={issue}>
                     {issue}
                   </option>
@@ -145,27 +165,50 @@ const RequestsPage = () => {
               </select>
             </div>
           )}
-          {amenity === 'others' && (
+
+          {/* Other Issue (if 'others' is selected) */}
+          {newRequest.amenity === "others" && (
             <div>
               <label htmlFor="otherIssue" className="block text-sm font-medium text-gray-700">
                 Describe the issue
               </label>
               <textarea
                 id="otherIssue"
-                value={otherIssue}
-                onChange={(e) => setOtherIssue(e.target.value)}
+                value={newRequest.otherIssue}
+                onChange={(e) => setNewRequest({ ...newRequest, otherIssue: e.target.value })}
                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                 required
               />
             </div>
           )}
-          <button
-            type="submit"
-            className="mt-4 bg-blue-500 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-600"
-          >
+
+          <button type="submit" className="mt-4 bg-blue-500 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-600">
             Submit Request
           </button>
         </form>
+
+        <hr className="my-10" />
+
+        {/* Existing Requests */}
+        <section className="mb-8">
+          <h2 className="text-xl font-semibold mb-4">Existing Requests</h2>
+          <div className="space-y-4">
+            {requests.map((request) => (
+              <div key={request.id} className="p-4 border rounded shadow-sm">
+                <p><strong>Room Number:</strong> {request.roomNumber}</p>
+                <p><strong>Amenity:</strong> {request.amenity}</p>
+                <p><strong>Issue:</strong> {request.issue}</p>
+                <p><strong>Status:</strong> {request.status}</p>
+                <div className="w-full bg-gray-200 rounded-full h-4 mt-2">
+                  <div
+                    className={`h-4 rounded-full ${request.status === "Completed" ? "bg-green-500" : "bg-blue-500"}`}
+                    style={{ width: `${getStatusProgress(request.status)}%` }}
+                  ></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
       </section>
     </main>
   );
