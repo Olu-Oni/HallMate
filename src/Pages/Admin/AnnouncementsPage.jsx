@@ -1,6 +1,8 @@
 // To Do
 // Remove the scroll wheel or use MUI imported components to make that easier
 
+import ExpandableSearchBar from "../../Components/ExpandableSearchBar";
+
 
 //Added Categorized announcements
 const Category = ({ category, announcements }) => {
@@ -101,8 +103,11 @@ const AnnouncementsManagementPage = () => {
     },
   ];
   return (
-    <main className="p-8 flex flex-col items-center md:px-20 sm:px-14">
+    <main className="p-8 flex flex-col items-center md:px-20 sm:px-14 -z-30">
       <h1 className="mb-8">Announcements</h1>
+      <button className="mt-4 mr-4 border tertiaryBg border-gray-700 p-3 py-2 rounded fixed z-20 bottom-10 right-10 self-end">
+          New Announcement
+        </button>
       {categories.map((cat) => {
         const catAnnouncements = announcements.filter(
           (ann) => cat === ann.category

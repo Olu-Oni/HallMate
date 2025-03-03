@@ -18,10 +18,10 @@ const SlideMenu = ({ navNames, status }) => {
   };
 
   return (
-    <aside className="slide-menu-container md:hidden fixed top-7 right-7 z-10">
+    <aside className="slide-menu-container md:hidden fixed top-7 right-7 z-[1000]">
       <label
         className={
-          isOpen ? "open-button close-button z-20 " : "open-button z-20 "
+          isOpen ? "open-button close-button z-[1001] " : "open-button z-[1001] "
         }
       >
         <input type="checkbox" checked={isOpen} onChange={toggleDropdown} />
@@ -29,8 +29,8 @@ const SlideMenu = ({ navNames, status }) => {
       <div
         className={
           isOpen
-            ? "slide-menu translate-x-[-150px]"
-            : "slide-menu translate-x-24"
+            ? "slide-menu translate-x-[-150px] z-[1000]"
+            : "slide-menu translate-x-24 z-[1000]"
         }
       >
         <div className="px-4 flex justify-center h-[30px] overflow-hidden slow-transition absolute top-16 left-1">

@@ -48,14 +48,14 @@ const RequestsPage = () => {
   const [requests, setRequests] = useState([
     {
       id: 1,
-      roomNumber: "101",
+      // roomNumber: "101",
       amenity: "electrical",
       issue: "light bulbs",
       status: "In Progress",
     },
     {
       id: 2,
-      roomNumber: "202",
+      // roomNumber: "202",
       amenity: "plumbing",
       issue: "tap",
       status: "Completed",
@@ -132,7 +132,7 @@ const RequestsPage = () => {
               id="amenity"
               value={newRequest.amenity}
               onChange={(e) => setNewRequest({ ...newRequest, amenity: e.target.value, issue: "" })}
-              className="mt-1 block pr-20 border border-gray-300 rounded-md shadow-sm p-2"
+              className="mt-1 block pr-20 border secondaryBg border-gray-300 rounded-md shadow-sm p-2"
               required
             >
               <option value="">Select an amenity</option>
@@ -195,7 +195,6 @@ const RequestsPage = () => {
           <div className="space-y-4">
             {requests.map((request) => (
               <div key={request.id} className="p-4 border rounded shadow-sm">
-                <p><strong>Room Number:</strong> {request.roomNumber}</p>
                 <p><strong>Amenity:</strong> {request.amenity}</p>
                 <p><strong>Issue:</strong> {request.issue}</p>
                 <p><strong>Status:</strong> {request.status}</p>

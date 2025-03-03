@@ -21,10 +21,10 @@ const SlideMenu = ({ navNames, status }) => {
     <aside className="slide-menu-container md:hidden fixed top-7 right-7 z-10">
       <label
         className={
-          isOpen ? "open-button close-button z-20 " : "open-button z-20 "
+          isOpen ? "open-button secondaryBg close-button z-20 " : "open-button secondaryBg z-20 "
         }
       >
-        <input type="checkbox" checked={isOpen} onChange={toggleDropdown} />
+        <input type="checkbox" checked={isOpen} onChange={toggleDropdown} className="secondaryBg"/>
       </label>
       <div
         className={

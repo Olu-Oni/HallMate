@@ -23,7 +23,7 @@ const StudentInfoPage = () => {
     else return "text-green-600";
   };
   return (
-    <main>
+    <main className="flex align-middle justify-center">
       {student ? (
         <div className="sm:my-8 sm:mx-14 md:mx-[15%] py-12 flex flex-col max-sm:items-center max-sm:text-center sm:px-[6%] studentInfo-bg">
           <header className="flex flex-wrap max-sm:flex-col items-center text-center sm:gap-x-14 gap-7">
@@ -70,7 +70,7 @@ const StudentInfoPage = () => {
           </div>
         </div>
       ) : (
-        <>Loading</>
+        <h1 className=" my-20 mx-auto">Obtaining Student Information...</h1>
       )}
     </main>
   );

@@ -61,7 +61,7 @@
   @apply p-0 m-0;
 }
 
-a {
+a,input, button {
   cursor: pointer;
 }
 h1 {
@@ -155,7 +155,7 @@ td
 .open-button input {
   appearance: none;
   height: calc((var(--bar-height)) - 1px);
-  @apply p-0 m-0;
+  @apply p-0 m-0 ;
 }
 
 .open-button::before {
