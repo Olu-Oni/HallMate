@@ -93,7 +93,7 @@ const App = () => {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/NotFound" element={<NotFound />} />
-
+          <Route path="/" element={<Login />} />
           {/* Protected Routes */}
           <Route element={<LogInRoute />}>
             {/* Student Routes */}
@@ -105,6 +105,7 @@ const App = () => {
                   path="/student-student_info/"
                   element={<StudentInfoPage />}
                 />
+
                 <Route
                   path="/student-announcements"
                   element={<AnnouncementsPage />}

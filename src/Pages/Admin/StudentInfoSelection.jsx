@@ -4,23 +4,45 @@ import { Link } from "react-router-dom";
 import { getAllStudents } from "../../services/students";
 
 const StudentRow = ({ student, position, id }) => {
-
   const isEven = position % 2 === 0;
+  const studentLocation = `/admin-student_info/${id}`;
   return (
-    <tr>
-      {/* 
-      <tr>
-        <td className={`p-2 ${isEven ? "secondaryBg" : "primaryBg"}`}>
-          <Link to={`/students/${student.matrNo}`} className="block w-full h-full">
-            {student.name}
-          </Link>
-        </td>
-        <td className="p-2">{student.matrNo}</td>
-        <td className="p-2">{student.roomNo || "N/A"}</td>
-        <td className="p-2">{student.merits || 0}</td>
-      </tr> 
-      */}
-      {Object.entries(student).map(([key, value]) => (
+    <tr className={`${isEven ? "secondaryBg " : "primaryBg "}`}>
+      <td className={`p-2 ${isEven ? "secondaryBg" : "primaryBg"}`}>
+        <Link
+          to={studentLocation}
+          className={` w-full h-full primaryTxt py-[6px] text-[.85rem] `}
+        >
+          {" "}
+          {student.name || "-"}
+        </Link>
+      </td>
+      <td className="p-2">
+        <Link
+          to={studentLocation}
+          className={` w-full h-full primaryTxt py-[6px] text-[.85rem] `}
+        >
+          {student.matrNo || "-"}{" "}
+        </Link>
+      </td>
+      <td className="p-2">
+        <Link
+          to={studentLocation}
+          className={` w-full h-full primaryTxt py-[6px] text-[.85rem] `}
+        >
+          {student.roomNo || "-"}{" "}
+        </Link>
+      </td>
+      <td className="p-2">
+        <Link
+          to={studentLocation}
+          className={` w-full h-full primaryTxt py-[6px] text-[.85rem] `}
+        >
+          {student.merits || "-"}{" "}
+        </Link>
+      </td>
+
+      {/* {Object.entries(student).map(([key, value]) => (
         <td key={key} className="p-0">
           <Link
             to={`/admin-student_info/${id}`}
@@ -31,7 +53,7 @@ const StudentRow = ({ student, position, id }) => {
             {value}
           </Link>
         </td>
-      ))}
+      ))} */}
     </tr>
   );
 };
@@ -83,8 +105,7 @@ const StudentInfoSelection = () => {
       .catch((error) => console.error("Error fetching students:", error));
   }, []);
 
-  console.log(students)
-  
+  console.log(students);
 
   // **Search Filter**
   const searchedStudents = students

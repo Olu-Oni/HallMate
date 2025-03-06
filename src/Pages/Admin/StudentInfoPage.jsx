@@ -1,50 +1,209 @@
-import { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { Pencil, Trash2, X, Check } from "lucide-react";
 import UserCircle from "../../Components/svg/UserCircle";
-import { MyStates } from "../../App";
-import { useParams } from "react-router-dom";
-import { getStudent, getStudentWithoutUser } from "../../services/students";
-import { useAuth } from "../../contexts/authContext";
+import {
+  createStudent,
+  getStudentWithoutUser,
+  updateStudent,
+} from "../../services/students";
 
+// Confirmation Dialog Component
+const ConfirmationDialog = ({ isOpen, onClose, onConfirm, title, message }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="secondaryBg rounded-lg shadow-xl p-6 max-w-sm w-full">
+        <h2 className="text-xl font-bold mb-4">{title}</h2>
+        <p className="mb-6">{message}</p>
+        <div className="flex justify-end space-x-3">
+          <button
+            onClick={onClose}
+            className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={onConfirm}
+            className={`px-4 py-2 ${
+              !isOpen === "save" ? "bg-red-500" : "bg-orange-500"
+            } text-white rounded-md hover:bg-white hover:outline hover:text-orange-700 -outline-offset-2 transition`}
+          >
+            Confirm
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Field Modal Component
+const FieldModal = ({
+  isOpen,
+  onClose,
+  onSave,
+  onDelete,
+  heading,
+  value,
+  isEditing,
+}) => {
+  const [newHeading, setNewHeading] = useState(heading || "");
+  const [newValue, setNewValue] = useState(value || "");
+
+  useEffect(() => {
+    setNewHeading(heading || "");
+    setNewValue(value || "");
+  }, [heading, value]);
+
+  const handleSave = () => {
+    if (newHeading.trim()) {
+      onSave(newHeading, newValue);
+      onClose();
+    }
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="primaryBg rounded-lg shadow-xl p-6 max-w-md w-full">
+        <h2 className="text-xl font-bold mb-4">
+          {isEditing ? "Edit Field" : "Add New Field"}
+        </h2>
+        <div className="space-y-4">
+          <input
+            type="text"
+            placeholder="Field Heading"
+            value={newHeading}
+            onChange={(e) => setNewHeading(e.target.value)}
+            className="w-full p-2  rounded-md focus:ring-2 secondaryBg outline-none focus:outline"
+          />
+          <input
+            type="text"
+            placeholder="Field Value"
+            value={newValue}
+            onChange={(e) => setNewValue(e.target.value)}
+            className="w-full p-2  rounded-md focus:ring-2 secondaryBg outline-none focus:outline"
+          />
+          <div className="flex justify-end space-x-3">
+            {isEditing && (
+              <button
+                onClick={() => onDelete(heading)}
+                className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition flex items-center"
+              >
+                <Trash2 className="mr-2" size={16} /> Delete
+              </button>
+            )}
+            <button
+              onClick={onClose}
+              className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleSave}
+              className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
+            >
+              {isEditing ? "Save" : "Add"}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Main Student Info Management Page
 const StudentInfoManagementPage = () => {
-  const [student, setStudent] = useState(null);
+  const navigate = useNavigate();
+  const [student, setStudent] = useState({
+    displayInfo: { name: "", matrNo: "",roomNo: "", merits: 0 },
+    personalInfo: {},
+    academicInfo: {},
+  });
+  const [editingField, setEditingField] = useState(null);
+  const [confirmDelete, setConfirmDelete] = useState(null);
+  const [confirmSave, setConfirmSave] = useState(null);
   const { id } = useParams();
 
   useEffect(() => {
-    getStudentWithoutUser(id)
-      .then((response) => setStudent(response))
-      .catch((error) => console.error("Error fetching students:", error));
+    id
+      ? getStudentWithoutUser(id)
+          .then((response) => {
+            setStudent((prev) => ({
+              displayInfo: { ...prev.displayInfo, ...response.displayInfo },
+              personalInfo: { ...prev.personalInfo, ...response.personalInfo },
+              academicInfo: { ...prev.academicInfo, ...response.academicInfo },
+            }));
+          })
+          .catch((error) => console.error("Error fetching students:", error))
+      : null;
   }, [id]);
 
-  const changeStudentEntry = (heading, value) => {
-    setStudent((prevStudent) => {
-      // Check if the key exists in personalInfo or academicInfo
-      if (heading in prevStudent.personalInfo) {
-        return {
-          ...prevStudent,
-          personalInfo: {
-            ...prevStudent.personalInfo,
-            [heading]: value,
-          },
-        };
-      } else if (heading in prevStudent.academicInfo) {
-        return {
-          ...prevStudent,
-          academicInfo: {
-            ...prevStudent.academicInfo,
-            [heading]: value,
-          },
-        };
-      } else if (heading in prevStudent.displayInfo) {
-        return {
-          ...prevStudent,
-          displayInfo: {
-            ...prevStudent.displayInfo,
-            [heading]: value,
-          },
-        };
+  console.log('info', student)
+  const saveStudent = async () => {
+    try {
+      let response;
+
+      if (id) {
+        // Update existing student
+        await updateStudent(id, student);
+        response = { ...student, id };
+        console.log("Student updated:", response);
+      } else {
+        // Create new student
+        response = await createStudent(student);
+        console.log("Student created:", response);
       }
 
-      return prevStudent; // No update if heading doesn't match
+      return response;
+    } catch (error) {
+      console.error("Error saving student:", error);
+      throw error; // Re-throw to allow caller to handle the error
+    }
+  };
+
+  const changeStudentEntry = (section, heading, value) => {
+    setStudent((prevStudent) => ({
+      ...prevStudent,
+      [section]: {
+        ...prevStudent[section],
+        [heading]: value,
+      },
+    }));
+  };
+
+  const addNewField = (heading, value, section) => {
+    setStudent((prevStudent) => ({
+      ...prevStudent,
+      [section]: {
+        ...prevStudent[section],
+        [heading.replaceAll(" ", "_")]: value || "NA",
+      },
+    }));
+  };
+
+  const editField = (section, oldHeading, newHeading, newValue) => {
+    setStudent((prevStudent) => {
+      const updatedSection = { ...prevStudent[section] };
+      delete updatedSection[oldHeading];
+      updatedSection[newHeading.replaceAll(" ", "_")] = newValue;
+      return {
+        ...prevStudent,
+        [section]: updatedSection,
+      };
+    });
+  };
+
+  const deleteField = (section, heading) => {
+    setStudent((prevStudent) => {
+      const updatedSection = { ...prevStudent[section] };
+      delete updatedSection[heading];
+      return {
+        ...prevStudent,
+        [section]: updatedSection,
+      };
     });
   };
 
@@ -53,96 +212,237 @@ const StudentInfoManagementPage = () => {
     else if (point <= -10) return "text-orange-500";
     else return "text-green-600";
   };
+
   return (
-    <main className="flex align-middle justify-center">
+    <main className="min-h-screen primaryBg flex items-center justify-center p-4">
       {student ? (
-        <div className="sm:my-8 sm:mx-14 md:mx-[15%] py-12 flex flex-col max-sm:items-center max-sm:text-center sm:px-[6%] studentInfo-bg">
-          <header className="flex flex-wrap max-sm:flex-col items-center text-center sm:gap-x-14 gap-7">
-            <UserCircle />
-            <div className="self-center">
-              <h1>Name: {student.displayInfo.name}</h1>
-              <h1>Student ID: {student.displayInfo.matrNo}</h1>
-            </div>
-            <div className="flex-grow flex justify-center text-[1.2rem]">
-              <h1 className=" text-[1.2rem] mr-2">Merits Points:</h1>
-              <h1 className={`${meritColor(student.displayInfo.merits)}`}>
+        <div className="secondaryBg shadow-2xl rounded-2xl w-full max-w-4xl p-8">
+          <header className="flex flex-wrap items-center gap-8 mb-8">
+            <UserCircle className="w-24 h-24" />
+            <div className="flex-grow space-y-4">
+              <div className="flex items-center space-x-4">
+                <label className="font-semibold">Name:</label>
                 <input
-                  id={"merits"}
-                  type="number"
-                  value={student.displayInfo.merits || "NA"}
+                  value={student.displayInfo.name || ""}
                   onChange={(e) =>
-                    changeStudentEntry?.("merits", e.target.value)
+                    changeStudentEntry("displayInfo", "name", e.target.value)
                   }
-                  className="max-w-[4ch] inline-block primaryBg px-2 rounded-sm active:outline mr-2"
+                  className="flex-grow px-3 py-2 border rounded-md focus:ring-2 primaryBg focus:ring-blue-500 focus:outline-none"
                 />
-                pts
-              </h1>
+              </div>
+              <div className="flex items-center space-x-4">
+                <label className="font-semibold">Student ID:</label>
+                <input
+                  value={student.displayInfo.matrNo || ""}
+                  onChange={(e) =>
+                    changeStudentEntry("displayInfo", "matrNo", e.target.value)
+                  }
+                  className="flex-grow px-3 py-2 border rounded-md focus:ring-2 primaryBg focus:ring-blue-500 focus:outline-none"
+                />
+              </div>
+              <div className="flex items-center space-x-4">
+                <label className="font-semibold">Room</label>
+                <input
+                  value={student.displayInfo.roomNo || null}
+                  onChange={(e) =>
+                    changeStudentEntry("displayInfo", "roomNo", e.target.value)
+                  }
+                  className={`w-20 px-3 py-2 border rounded-md focus:ring-2 primaryBg text-lg focus:ring-blue-500 focus:outline-none `}
+                />
+              
+                <label className="font-semibold">Merits Points:</label>
+                <input
+                  type="number"
+                  value={student.displayInfo.merits || 0}
+                  onChange={(e) =>
+                    changeStudentEntry("displayInfo", "merits", e.target.value)
+                  }
+                  className={`w-20 px-3 py-2 border rounded-md focus:ring-2 primaryBg text-lg focus:ring-blue-500 focus:outline-none ${meritColor(
+                    student.displayInfo.merits
+                  )}`}
+                />
+                <span>pts</span>
+              </div>
             </div>
           </header>
-          <div className="my-8 mx-4">
-            <h2 className="underline mt-8 mb-4 text-2xl font-bold">
-              <i>Personal Information</i>
-            </h2>
-            {/* object gets turned into array containing keys and values as the sub-array values */}
-            <div className="flex justify-between flex-wrap">
-              {Object.entries(student.personalInfo)
-                // removing the first two entries
-                // .filter((row, idx) => idx > 2)
-                .map((row) => (
-                  <InfoRow
-                    key={row[0]}
-                    heading={row[0]}
-                    value={row[1]}
-                    changeEntry={changeStudentEntry}
-                  />
-                ))}
-            </div>
 
-            {/* Academic Info Section */}
-
-            <h2 className="underline mt-8 mb-4 text-2xl font-bold">
-              <i>Academic Information</i>
+          {/* Personal Information Section */}
+          <section className="mb-8">
+            <h2 className="text-2xl font-bold border-b pb-2 mb-4">
+              Personal Information
             </h2>
-            {/* object gets turned into array containing keys and values as the sub-array values */}
-            <div className="flex justify-between flex-wrap">
-              {Object.entries(student.academicInfo)
-                // removing the first two entries
-                // .filter((row, idx) => idx > 2)
-                .map((row) => (
-                  <InfoRow
-                    key={row[0]}
-                    heading={row[0]}
-                    value={row[1]}
-                    changeEntry={changeStudentEntry}
-                  />
-                ))}
+            <div className="grid md:grid-cols-2 gap-4">
+              {Object.entries(student.personalInfo).map(([key, value]) => (
+                <div
+                  key={key}
+                  className="primaryBg p-4 rounded-lg flex justify-between items-center"
+                >
+                  <div>
+                    <div className="font-semibold mb-2">
+                      {key.replaceAll("_", " ")}
+                    </div>
+                    <input
+                      value={value || ""}
+                      onChange={(e) =>
+                        changeStudentEntry("personalInfo", key, e.target.value)
+                      }
+                      className="w-full px-2 py-1 border secondaryBg rounded"
+                    />
+                  </div>
+                  <div className="flex space-x-2">
+                    <button
+                      onClick={() =>
+                        setEditingField({
+                          section: "personalInfo",
+                          heading: key,
+                          value,
+                        })
+                      }
+                      className="text-blue-500 hover:text-blue-700"
+                    >
+                      <Pencil size={20} />
+                    </button>
+                    <button
+                      onClick={() =>
+                        setConfirmDelete({
+                          section: "personalInfo",
+                          heading: key,
+                        })
+                      }
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      <Trash2 size={20} />
+                    </button>
+                  </div>
+                </div>
+              ))}
+              <button
+                onClick={() => setEditingField({ section: "personalInfo" })}
+                className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition"
+              >
+                Add New Field
+              </button>
             </div>
+          </section>
+
+          {/* Academic Information Section */}
+          <section>
+            <h2 className="text-2xl font-bold border-b pb-2 mb-4">
+              Academic Information
+            </h2>
+            <div className="grid md:grid-cols-2 gap-4">
+              {Object.entries(student.academicInfo).map(([key, value]) => (
+                <div
+                  key={key}
+                  className="primaryBg p-4 rounded-lg flex justify-between items-center"
+                >
+                  <div>
+                    <div className="font-semibold mb-2">
+                      {key.replaceAll("_", " ")}
+                    </div>
+                    <input
+                      value={value || ""}
+                      onChange={(e) =>
+                        changeStudentEntry("academicInfo", key, e.target.value)
+                      }
+                      className="w-full px-2 py-1 border secondaryBg rounded"
+                    />
+                  </div>
+                  <div className="flex space-x-2">
+                    <button
+                      onClick={() =>
+                        setEditingField({
+                          section: "academicInfo",
+                          heading: key,
+                          value,
+                        })
+                      }
+                      className="text-blue-500 hover:text-blue-700"
+                    >
+                      <Pencil size={20} />
+                    </button>
+                    <button
+                      onClick={() =>
+                        setConfirmDelete({
+                          section: "academicInfo",
+                          heading: key,
+                        })
+                      }
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      <Trash2 size={20} />
+                    </button>
+                  </div>
+                </div>
+              ))}
+              <button
+                onClick={() => setEditingField({ section: "academicInfo" })}
+                className="bg-blue-500 self-center h-fit md:w-fit text-white px-4 py-2 rounded-md hover:bg-blue-600 transition"
+              >
+                Add New Field
+              </button>
+            </div>
+          </section>
+
+          <div className="border-t border-solid border-gray-200 w-full mt-5 p-4 relative">
+            {" "}
+            <button
+              onClick={() => setConfirmSave("save")}
+              className="bg-orange-400 w-full self-center text-white px-4 py-2 rounded-md hover:bg-white hover:text-orange-400 hover:outline transition sticky"
+            >
+              Save Student
+            </button>
           </div>
+          {/* Field Modal for Adding/Editing */}
+          <FieldModal
+            isOpen={!!editingField}
+            onClose={() => setEditingField(null)}
+            onSave={(newHeading, newValue) =>
+              editingField.heading
+                ? editField(
+                    editingField.section,
+                    editingField.heading,
+                    newHeading,
+                    newValue
+                  )
+                : addNewField(newHeading, newValue, editingField.section)
+            }
+            onDelete={(heading) => deleteField(editingField.section, heading)}
+            heading={editingField?.heading}
+            value={editingField?.value}
+            isEditing={!!editingField?.heading}
+          />
+
+          {/* Confirmation Dialog for Deletion */}
+          <ConfirmationDialog
+            isOpen={!!confirmDelete}
+            onClose={() => setConfirmDelete(null)}
+            onConfirm={() => {
+              deleteField(confirmDelete.section, confirmDelete.heading);
+              setConfirmDelete(null);
+            }}
+            title="Confirm Deletion"
+            message="Are you sure you want to delete this field?"
+          />
+          {/* Confirmation Dialog for Save */}
+          <ConfirmationDialog
+            isOpen={!!confirmSave}
+            onClose={() => setConfirmSave(null)}
+            onConfirm={() => {
+              saveStudent();
+              setConfirmSave(null);
+              navigate("/admin-student_infoSelect", {replace:true})
+            }}
+            title="Confirm Student Save"
+            // message="Are you sure you want to delete this field?"
+          />
         </div>
       ) : (
-        <h1 className="my-20 ">Obtaining Student Information...</h1>
+        <div className="text-center text-xl">
+          Loading Student Information...
+        </div>
       )}
     </main>
-  );
-};
-
-const InfoRow = ({ heading, value, changeEntry }) => {
-  return (
-    <div className="flex  gap-4 my-5 text-[0.85rem] max-sm:w-full sm:min-w-[480px] md:min-w-[50%] max-sm:justify-around text-nowrap max-sm:text-left">
-      <div className="w-fit sm:w-1/4 mr-3 font-semibold ">
-        <label htmlFor={heading}>{heading.replaceAll("_", " ")}:</label>{" "}
-        {/* Label for accessibility */}
-      </div>
-      <div className=" max-sm:text-wrap">
-        <input
-          id={heading}
-          value={value || "NA"}
-          onChange={(e) => changeEntry?.(heading, e.target.value)}
-          className="primaryBg px-2 rounded-sm active:outline"
-        />{" "}
-        {/* Or an input if needed */}
-      </div>
-    </div>
   );
 };
 
