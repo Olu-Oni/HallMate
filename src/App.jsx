@@ -89,7 +89,7 @@ const App = () => {
 
   return (
     <MyStates.Provider value={myStates}>
-      <div className={`flex flex-col grow ${isChecked ? "dark" : "light"}`}>
+      <div className={`flex grow flex-col ${isChecked ? "dark" : "light"}`}>
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/NotFound" element={<NotFound />} />

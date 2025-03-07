@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
-import { Pencil, Trash2, X, Check } from "lucide-react";
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
+import { Pencil, Trash2, X, ArrowBigLeft } from "lucide-react";
 import UserCircle from "../../Components/svg/UserCircle";
 import {
   createStudent,
@@ -105,7 +105,7 @@ const FieldModal = ({
               onClick={handleSave}
               className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
             >
-              {isEditing ? "Save" : "Add"}
+              {isEditing ? "Done" : "Add"}
             </button>
           </div>
         </div>
@@ -118,7 +118,7 @@ const FieldModal = ({
 const StudentInfoManagementPage = () => {
   const navigate = useNavigate();
   const [student, setStudent] = useState({
-    displayInfo: { name: "", matrNo: "",roomNo: "", merits: 0 },
+    displayInfo: { name: "", matrNo: "", roomNo: "", merits: 0 },
     personalInfo: {},
     academicInfo: {},
   });
@@ -141,7 +141,7 @@ const StudentInfoManagementPage = () => {
       : null;
   }, [id]);
 
-  console.log('info', student)
+  console.log("info", student);
   const saveStudent = async () => {
     try {
       let response;
@@ -216,10 +216,13 @@ const StudentInfoManagementPage = () => {
   return (
     <main className="min-h-screen primaryBg flex items-center justify-center p-4">
       {student ? (
-        <div className="secondaryBg shadow-2xl rounded-2xl w-full max-w-4xl p-8">
+        <div className="secondaryBg shadow-2xl rounded-2xl w-full max-w-4xl p-8 pt-2 ">
+          <Link to={'/admin-student_infoSelect'} className="m-3 font-semibold flex underline">
+          <ArrowBigLeft/>
+          back</Link>
           <header className="flex flex-wrap items-center gap-8 mb-8">
             <UserCircle className="w-24 h-24" />
-            <div className="flex-grow space-y-4">
+            <div className="w-full space-y-4">
               <div className="flex items-center space-x-4">
                 <label className="font-semibold">Name:</label>
                 <input
@@ -227,7 +230,7 @@ const StudentInfoManagementPage = () => {
                   onChange={(e) =>
                     changeStudentEntry("displayInfo", "name", e.target.value)
                   }
-                  className="flex-grow px-3 py-2 border rounded-md focus:ring-2 primaryBg focus:ring-blue-500 focus:outline-none"
+                  className="min-w-32 sm:w-[45%] px-3 py-2 border rounded-md focus:ring-2 primaryBg focus:ring-blue-500 focus:outline-none"
                 />
               </div>
               <div className="flex items-center space-x-4">
@@ -237,31 +240,42 @@ const StudentInfoManagementPage = () => {
                   onChange={(e) =>
                     changeStudentEntry("displayInfo", "matrNo", e.target.value)
                   }
-                  className="flex-grow px-3 py-2 border rounded-md focus:ring-2 primaryBg focus:ring-blue-500 focus:outline-none"
+                  className="min-w-32 sm:w-[40%] px-3 py-2 border rounded-md focus:ring-2 primaryBg focus:ring-blue-500 focus:outline-none"
                 />
               </div>
-              <div className="flex items-center space-x-4">
-                <label className="font-semibold">Room</label>
-                <input
-                  value={student.displayInfo.roomNo || null}
-                  onChange={(e) =>
-                    changeStudentEntry("displayInfo", "roomNo", e.target.value)
-                  }
-                  className={`w-20 px-3 py-2 border rounded-md focus:ring-2 primaryBg text-lg focus:ring-blue-500 focus:outline-none `}
-                />
-              
-                <label className="font-semibold">Merits Points:</label>
-                <input
-                  type="number"
-                  value={student.displayInfo.merits || 0}
-                  onChange={(e) =>
-                    changeStudentEntry("displayInfo", "merits", e.target.value)
-                  }
-                  className={`w-20 px-3 py-2 border rounded-md focus:ring-2 primaryBg text-lg focus:ring-blue-500 focus:outline-none ${meritColor(
-                    student.displayInfo.merits
-                  )}`}
-                />
-                <span>pts</span>
+              <div className="flex items-center flex-wrap gap-4">
+                <div>
+                  <label className="font-semibold mr-4">Room:</label>
+                  <input
+                    value={student.displayInfo.roomNo || ""}
+                    onChange={(e) =>
+                      changeStudentEntry(
+                        "displayInfo",
+                        "roomNo",
+                        e.target.value
+                      )
+                    }
+                    className={`w-20 px-3 py-2 border rounded-md focus:ring-2 primaryBg text-lg focus:ring-blue-500 focus:outline-none `}
+                  />
+                </div>
+                <div className="flex items-center">
+                  <label className="font-semibold mr-4">Merit Points:</label>
+                  <input
+                    type="number"
+                    value={student.displayInfo.merits || 0}
+                    onChange={(e) =>
+                      changeStudentEntry(
+                        "displayInfo",
+                        "merits",
+                        e.target.value
+                      )
+                    }
+                    className={`w-20 px-3 py-2 mr-2 border rounded-md focus:ring-2 primaryBg text-lg focus:ring-blue-500 focus:outline-none ${meritColor(
+                      student.displayInfo.merits
+                    )}`}
+                  />
+                  <span>pts</span>
+                </div>
               </div>
             </div>
           </header>
@@ -283,6 +297,7 @@ const StudentInfoManagementPage = () => {
                     </div>
                     <input
                       value={value || ""}
+                      disabled
                       onChange={(e) =>
                         changeStudentEntry("personalInfo", key, e.target.value)
                       }
@@ -342,6 +357,7 @@ const StudentInfoManagementPage = () => {
                     </div>
                     <input
                       value={value || ""}
+                      disabled
                       onChange={(e) =>
                         changeStudentEntry("academicInfo", key, e.target.value)
                       }
@@ -390,7 +406,7 @@ const StudentInfoManagementPage = () => {
               onClick={() => setConfirmSave("save")}
               className="bg-orange-400 w-full self-center text-white px-4 py-2 rounded-md hover:bg-white hover:text-orange-400 hover:outline transition sticky"
             >
-              Save Student
+              Save & Exit
             </button>
           </div>
           {/* Field Modal for Adding/Editing */}
@@ -431,7 +447,7 @@ const StudentInfoManagementPage = () => {
             onConfirm={() => {
               saveStudent();
               setConfirmSave(null);
-              navigate("/admin-student_infoSelect", {replace:true})
+              navigate("/admin-student_infoSelect", { replace: true });
             }}
             title="Confirm Student Save"
             // message="Are you sure you want to delete this field?"

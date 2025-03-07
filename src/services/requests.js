@@ -34,8 +34,10 @@ import {
       // Add timestamp to request data
       const requestWithTimestamp = {
         ...requestData,
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp()
+        createdAt: new Date().toLocaleDateString("en-GB"),
+        updatedAt: new Date().toLocaleDateString("en-GB"),
+        // createdAt: serverTimestamp(),
+        // updatedAt: serverTimestamp()
       };
   
       // Add the document to Firestore

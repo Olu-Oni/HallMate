@@ -101,7 +101,8 @@ const StudentInfoSelection = () => {
 
   useEffect(() => {
     getAllStudents()
-      .then((response) => setStudents(response))
+    // remove filter when displayInfo error is fixed
+      .then((response) => setStudents(response.filter(s=>s.displayInfo?s:null)))
       .catch((error) => console.error("Error fetching students:", error));
   }, []);
 
