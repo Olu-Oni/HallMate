@@ -50,10 +50,10 @@ const ExpandableSearchBar = ({ searchQuery, setSearchQuery, onSearch }) => {
   }, []);
 
   return (
-    <div ref={containerRef} className="w-full sticky top-5 mr-2 flex justify-center mb-8">
+    <div ref={containerRef} className="w-full mr-2 mb-8">
       <div
-        className={`absolute left-2 flex h-12 items-center secondaryBg backdrop-blur-md transition-all duration-300 ease-in-out border-2 border-gray-300 rounded-full ${
-          isExpanded ? "w-[90%] md:w-96 px-4 py-2" : "w-12 "
+        className={` flex h-12 items-center secondaryBg backdrop-blur-md transition-all duration-300 ease-in-out border-2 border-gray-300 rounded-full ${
+          isExpanded ? "w-[80%] md:w-96 px-4 py-2" : "w-12 "
         }`}
       >
         {/* Search Icon Button (Expands Search Bar on Click) */}

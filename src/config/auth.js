@@ -15,3 +15,12 @@ export const doSignInWithGoogle = async () =>{
 export const doSignOut = () => {
     return auth.signOut()
 }
+
+/**
+ * Sends a password reset email to the specified email address
+ * @param {string} email - The email address to send the reset link to
+ * @returns {Promise<void>} - A promise that resolves when the reset email is sent
+ */
+export const doPasswordReset = (email) => {
+    return auth.sendPasswordResetEmail(email);
+  };

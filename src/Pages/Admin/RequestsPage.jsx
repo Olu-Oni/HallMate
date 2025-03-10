@@ -133,7 +133,7 @@ const RequestCategory = ({
   onChangeStatus,
 }) => {
   // State for expanding request section
-  const [expand, setExpand] = useState(false);
+  const [expand, setExpand] = useState(true);
   // State for status change dropdown visibility
   const [showStatusDropdown, setShowStatusDropdown] = useState(false);
 
@@ -282,7 +282,7 @@ const RequestForm = ({
       </div>
 
       {/* status Selection */}
-      <div>
+      {/* <div>
         <label htmlFor="status" className="block text-sm font-medium  mb-1">
           Status
         </label>
@@ -297,13 +297,14 @@ const RequestForm = ({
           }
           className="block w-[70%] max-w-md border secondaryBg border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
           required
+          disabled={!isEdit}
         >
           <option value="Pending">Pending</option>
           <option value="Reviewed">Reviewed</option>
           <option value="Completed">Completed</option>
           <option value="Cancelled">Cancelled</option>
         </select>
-      </div>
+      </div> */}
       {/* Amenity Selection */}
       <div>
         <label htmlFor="amenity" className="block text-sm font-medium  mb-1">
@@ -460,12 +461,12 @@ const RequestsManagementPage = () => {
   });
 
   // Get student info from context or props (assuming it exists in your app)
-  const student = { displayInfo: { roomNo: "202" } };
+  // const student = { displayInfo: { roomNo: "202" } };
 
   // Reset form
   const resetNewRequest = () => {
     setNewRequest({
-      roomNo: student?.displayInfo?.roomNo || "",
+      roomNo: "",
       amenity: "",
       issue: "",
       otherIssue: "",
@@ -473,6 +474,7 @@ const RequestsManagementPage = () => {
     });
   };
 
+  
   // Open modal for creating a new request
   const openNewRequestModal = () => {
     resetNewRequest();
@@ -547,7 +549,7 @@ const RequestsManagementPage = () => {
         newRequest.amenity === "others"
           ? newRequest.otherIssue
           : newRequest.issue,
-      status: newRequest.status,
+      status: "Pending",
     };
 
     if (modalType === "edit") {
