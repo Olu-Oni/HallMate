@@ -20,6 +20,7 @@ import StudentInfoSelection from "./Pages/Admin/StudentInfoSelection";
 import NotFound from "./Pages/NotFound";
 import StudentNavbar from "./Pages/Student/StudentNavbar";
 import AdminNavbar from "./Pages/Admin/AdminNavbar";
+import MaintenanceReport from "./Pages/Admin/Reports/RequestReports";
 
 export const MyStates = createContext();
 
@@ -117,6 +118,8 @@ const App = () => {
             {/* Admin Routes */}
             <Route element={<AdminRoutes role={userInfo?.role} />}>
               <Route element={<AdminNavbar />}>
+              <Route path="/Maintenance-Report" element={<MaintenanceReport />} />
+          
                 <Route
                   path="/admin-student_infoSelect"
                   element={<StudentInfoSelection />}

@@ -6,6 +6,7 @@ import {
   getAllRequests,
   updateRequest,
 } from "../../services/requests";
+import { Link } from "react-router-dom";
 
 const Request = ({ request, selected, onSelect, onEdit, onDelete }) => {
   // If no request data is provided, use placeholder data
@@ -656,9 +657,10 @@ const RequestsManagementPage = () => {
           </button>
         </div>
       </div>
+      <Link to={'/Maintenance-Report'} className="underline underline-offset-2"><a>View Maintenance Reports</a></Link>
 
       {/* Existing Requests */}
-      <section className="space-y-4">
+      <section className="space-y-4 mt-3">
         <h2 className="text-lg font-semibold text-gray-700 mb-3">
           Existing Requests
         </h2>
