@@ -252,18 +252,18 @@ const MaintenanceReport = () => {
           <h3 className="text-lg font-semibold mb-2">Request Details by Room</h3>
           <table className="w-full border-collapse">
             <thead>
-              <tr className="secondaryBg">
-                <th className="p-2 border text-left">Room Number</th>
-                <th className="p-2 border text-center">Pending</th>
-                <th className="p-2 border text-center">In Progress</th>
-                <th className="p-2 border text-center">Completed</th>
-                <th className="p-2 border text-center">Total</th>
+              <tr className="tertiaryBg ">
+                <th className="p-2 border tertiaryTxt text-left">Room Number</th>
+                <th className="p-2 border tertiaryTxt text-center">Pending</th>
+                <th className="p-2 border tertiaryTxt text-center">In Progress</th>
+                <th className="p-2 border tertiaryTxt text-center">Completed</th>
+                <th className="p-2 border tertiaryTxt text-center">Total</th>
               </tr>
             </thead>
             <tbody>
               {reportData.requestsByRoom.map((hall, index) => (
-                <tr key={index} className={index % 2 === 0 ? 'primaryBg' : 'bg-gray-50'}>
-                  <td className="p-2 border">{hall.name}</td>
+                <tr key={index} className={index % 2 === 0 ? 'primaryBg' : 'secondaryBg'}>
+                  <td className="p-2 border ">{hall.name}</td>
                   <td className="p-2 border text-center">{hall.pending}</td>
                   <td className="p-2 border text-center">{hall['in-progress']}</td>
                   <td className="p-2 border text-center">{hall.completed}</td>

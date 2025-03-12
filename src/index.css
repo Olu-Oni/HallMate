@@ -50,6 +50,10 @@
   color: var(--primary-text);
 }
 
+.tertiaryTxt{
+  color: var(--tertiary-text);
+}
+
 .tertiaryBg{
   background-color: var(--tertiary-bg-color);
   color: var(--tertiary-text)
