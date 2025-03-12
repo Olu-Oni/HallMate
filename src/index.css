@@ -124,7 +124,7 @@ td
 /* slide-Menu */
 .slide-menu {
   background-color: var(--secondary-bg-color);
-  @apply fixed top-0 transition-transform duration-300 ease-out  w-[220px] h-[350px] rounded-bl-3xl pt-20;
+  @apply fixed top-0 transition-transform duration-300 ease-out  w-[220px] rounded-bl-3xl pt-20;
 }
 
 /* nav items */

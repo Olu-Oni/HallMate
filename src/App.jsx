@@ -21,6 +21,7 @@ import NotFound from "./Pages/NotFound";
 import StudentNavbar from "./Pages/Student/StudentNavbar";
 import AdminNavbar from "./Pages/Admin/AdminNavbar";
 import MaintenanceReport from "./Pages/Admin/Reports/RequestReports";
+import LogsPage from "./Pages/Admin/AdminLogs";
 
 export const MyStates = createContext();
 
@@ -135,6 +136,10 @@ const App = () => {
                 <Route
                   path="/admin-requests"
                   element={<RequestsManagementPage />}
+                />
+                <Route
+                  path="/admin-logs"
+                  element={<LogsPage/>}
                 />
               </Route>
 

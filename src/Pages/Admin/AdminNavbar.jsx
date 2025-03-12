@@ -29,8 +29,8 @@ const SlideMenu = ({ navNames, status }) => {
       <div
         className={
           isOpen
-            ? "slide-menu translate-x-[-150px] z-[1000]"
-            : "slide-menu translate-x-24 z-[1000]"
+            ? "slide-menu min-h-[380px] translate-x-[-150px] z-[1000]"
+            : "slide-menu min-h-[380px] translate-x-24 z-[1000]"
         }
       >
         <div className="px-4 flex justify-center h-[30px] overflow-hidden slow-transition absolute top-16 left-1">
@@ -113,9 +113,10 @@ const AdminNavbar = () => {
   //changed the way the useContext was used for other comps. to work smoother
   const { isChecked, toggleTheme } = myStates.myTheme;
   const navNames = [
-    { loc: `student_infoSelect`, name: "Student Information" },
+    { loc: `student_infoSelect`, name: "Students" },
     { loc: "requests", name: "Requests" },
     { loc: "announcements", name: "Announcements" },
+    { loc: "logs", name: "Logs" },
   ];
 
   return (
