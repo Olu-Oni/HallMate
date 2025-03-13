@@ -137,6 +137,10 @@ const App = () => {
                     path="/admin-student_info/:id"
                     element={<StudentInfoManagementPage />}
                   />
+                   <Route
+                    path="/admin-student_info"
+                    element={<StudentInfoManagementPage />}
+                  />
                   <Route
                     path="/admin-announcements"
                     element={<AnnouncementsManagementPage />}

@@ -1,7 +1,8 @@
-import React, { useContext, useEffect, useState } from "react";
+import React from 'react';
+import { useContext, useEffect, useState } from "react";
 import { MyStates } from "../../App";
 import { Link } from "react-router-dom";
-import { getAllStudents, addStudentToDatabase } from "../../services/students";
+import { getAllStudents } from "../../services/students";
 
 const StudentRow = ({ student, position, id }) => {
   const isEven = position % 2 === 0;
@@ -81,87 +82,17 @@ const StudentList = ({ students }) => {
   );
 };
 
-const AddStudentModal = ({ isOpen, onClose, onSave }) => {
-  const [name, setName] = useState("");
-  const [matrNo, setMatrNo] = useState("");
-  const [roomNo, setRoomNo] = useState("");
-  const [merits, setMerits] = useState("");
-
-  const handleSave = () => {
-    onSave({ name, matrNo, roomNo, merits });
-    onClose();
-  };
-
-  if (!isOpen) return null;
-
-  return (
-    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white p-6 rounded shadow-lg w-1/2">
-        <h2 className="text-xl font-semibold">Add New Student</h2>
-        <div className="mt-4">
-          <label className="block">Name</label>
-          <input
-            className="border p-2 w-full"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </div>
-        <div className="mt-4">
-          <label className="block">Student ID</label>
-          <input
-            className="border p-2 w-full"
-            value={matrNo}
-            onChange={(e) => setMatrNo(e.target.value)}
-          />
-        </div>
-        <div className="mt-4">
-          <label className="block">Room No.</label>
-          <input
-            className="border p-2 w-full"
-            value={roomNo}
-            onChange={(e) => setRoomNo(e.target.value)}
-          />
-        </div>
-        <div className="mt-4">
-          <label className="block">Merits</label>
-          <input
-            className="border p-2 w-full"
-            value={merits}
-            onChange={(e) => setMerits(e.target.value)}
-          />
-        </div>
-        <div className="mt-4 flex justify-end">
-          <button
-            onClick={onClose}
-            className="bg-gray-500 text-white py-2 px-4 rounded mr-2"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={handleSave}
-            className="bg-blue-500 text-white py-2 px-4 rounded"
-          >
-            Save
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
 const StudentInfoSelection = () => {
   const [students, setStudents] = useState([]);
   const [searchText, setSearchText] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    
     getAllStudents()
       .then((response) => setStudents(response.filter(s => s.displayInfo ? s : null)))
       .catch((error) => console.error("Error fetching students:", error));
   }, []);
 
-  // console.log(students);
+  console.log(students);
 
   const searchedStudents = students
     ? students.filter((st) => {
@@ -194,14 +125,17 @@ const StudentInfoSelection = () => {
     };
   });
 
-  const handleSaveStudent = (newStudent) => {
-    const student = {
+  const addNewStudent = () => {
+    const newStudent = {
       id: students.length + 1,
-      displayInfo: newStudent,
+      displayInfo: {
+        name: "New Student",
+        matrNo: "123456",
+        roomNo: "101",
+        merits: "0",
+      },
     };
-    addStudentToDatabase(student).then(() => {
-      setStudents([...students, student]);
-    });
+    setStudents([...students, newStudent]);
   };
 
   return (
@@ -223,18 +157,13 @@ const StudentInfoSelection = () => {
               onChange={(e) => setSearchText(e.target.value)}
             />
             <button
-              onClick={() => setIsModalOpen(true)}
+              onClick={addNewStudent}
               className="bg-blue-500 text-white py-2 px-4 rounded"
             >
               Add New Student
             </button>
           </div>
           <StudentList students={studentsWithShortNames} />
-          <AddStudentModal
-            isOpen={isModalOpen}
-            onClose={() => setIsModalOpen(false)}
-            onSave={handleSaveStudent}
-          />
         </>
       ) : (
         <h1>Loading</h1>
