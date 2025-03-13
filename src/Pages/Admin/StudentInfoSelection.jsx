@@ -155,12 +155,13 @@ const StudentInfoSelection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
+    
     getAllStudents()
       .then((response) => setStudents(response.filter(s => s.displayInfo ? s : null)))
       .catch((error) => console.error("Error fetching students:", error));
   }, []);
 
-  console.log(students);
+  // console.log(students);
 
   const searchedStudents = students
     ? students.filter((st) => {

@@ -13,14 +13,14 @@
   --burger-height: calc((var(--bar-height) * 3) + var(--burger-gap) * 2);
 }
 .light {
-  --primary-blue: #34495E;
+  --primary-blue: #34495e;
   --pimary-orange: #f39c12;
   --secondary-blue: #e5f7ff;
-  --secondary-orange: #fcf3e3;
-  --primary-text: #34495E;
+  --secondary-orange: #fee7ce;
+  --primary-text: #34495e;
   --primary-bg-color: white;
-  --secondary-bg-color: #f1efef;
-  --tertiary-bg-color:  #fcf3e3;
+  --secondary-bg-color: #fcf3eb;
+  --tertiary-bg-color: #fcf3e3;
   --tertiary-text: hsl(210, 29%, 22%);
 }
 .dark {
@@ -32,31 +32,31 @@
   --primary-bg-color: hsl(208, 25%, 12%);
   --secondary-bg-color: hsl(210, 29%, 22%);
   --tertiary-bg-color: #e5f7ff;
-  --tertiary-text: #34495E;
+  --tertiary-text: #34495e;
 }
 
 .secondaryBlue {
   fill: var(--primary-text);
 }
 
-.secondaryBg{
+.secondaryBg {
   background-color: var(--secondary-bg-color);
 }
 
-.primaryBg{
+.primaryBg {
   background-color: var(--primary-bg-color);
 }
-.primaryTxt{
+.primaryTxt {
   color: var(--primary-text);
 }
 
-.tertiaryTxt{
+.tertiaryTxt {
   color: var(--tertiary-text);
 }
 
-.tertiaryBg{
+.tertiaryBg {
   background-color: var(--tertiary-bg-color);
-  color: var(--tertiary-text)
+  color: var(--tertiary-text);
 }
 * {
   transition: all 0.2s ease-in-out;
@@ -65,11 +65,13 @@
   @apply p-0 m-0;
 }
 
-a,input, button {
+a,
+input,
+button {
   cursor: pointer;
 }
 h1 {
-  @apply text-2xl  font-semibold ;
+  @apply text-2xl  font-semibold;
 }
 
 h2 {
@@ -91,9 +93,7 @@ td {
   @apply w-1/4 text-center border-none stroke-none px-4 py-2;
 }
 
-td
-
-.logo1 {
+td .logo1 {
   color: var(--primary-blue);
 }
 
@@ -123,7 +123,7 @@ td
 
 /* slide-Menu */
 .slide-menu {
-  background-color: var(--secondary-bg-color);
+  background-color: var(--primary-bg-color);
   @apply fixed top-0 transition-transform duration-300 ease-out  w-[220px] rounded-bl-3xl pt-20;
 }
 
@@ -131,17 +131,18 @@ td
 .nav_item {
   @apply h-fit px-7 py-3 rounded-e-[-15px] w-[90%] text-nowrap;
 }
-@media not all and (min-width: 768px) {
+@media not all and (min-width: 850px) {
   .nav_item:hover {
-    background-color: var(--primary-bg-color);
+    background-color: var(--secondary-bg-color);
     transition: color none;
     @apply translate-x-[.5em];
   }
 }
+
 .active {
   transition: color none;
   text-decoration: underline var(--pimary-orange) 1.75px;
-  @apply underline-offset-8 ;
+  @apply underline-offset-8;
 }
 
 /* burger */
@@ -159,7 +160,7 @@ td
 .open-button input {
   appearance: none;
   height: calc((var(--bar-height)) - 1px);
-  @apply p-0 m-0 ;
+  @apply p-0 m-0;
 }
 
 .open-button::before {

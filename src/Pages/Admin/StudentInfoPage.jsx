@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { Pencil, Trash2, X, ArrowBigLeft } from "lucide-react";
 import UserCircle from "../../Components/svg/UserCircle";
@@ -7,6 +7,10 @@ import {
   getStudentWithoutUser,
   updateStudent,
 } from "../../services/students";
+import { MyStates } from "../../App";
+import { deepCompareObjects } from "../../services/functions";
+import { logAction } from "../../services/logs";
+import { NotificationContext } from "../../Components/Notification";
 
 // Confirmation Dialog Component
 const ConfirmationDialog = ({ isOpen, onClose, onConfirm, title, message }) => {
@@ -116,6 +120,11 @@ const FieldModal = ({
 
 // Main Student Info Management Page
 const StudentInfoManagementPage = () => {
+  const myStates = useContext(MyStates)
+  const { showNotification } = useContext(NotificationContext);
+
+  const {user} = myStates
+  // console.log(user.userInfo)
   const navigate = useNavigate();
   const [student, setStudent] = useState({
     displayInfo: { name: "", matrNo: "", roomNo: "", merits: 0 },
@@ -126,6 +135,7 @@ const StudentInfoManagementPage = () => {
   const [confirmDelete, setConfirmDelete] = useState(null);
   const [confirmSave, setConfirmSave] = useState(null);
   const { id } = useParams();
+  const [prevStudent, setprevStudent] = useState({});
 
   useEffect(() => {
     id
@@ -136,29 +146,50 @@ const StudentInfoManagementPage = () => {
               personalInfo: { ...prev.personalInfo, ...response.personalInfo },
               academicInfo: { ...prev.academicInfo, ...response.academicInfo },
             }));
+            setprevStudent(response)
           })
           .catch((error) => console.error("Error fetching students:", error))
       : null;
   }, [id]);
 
-  console.log("info", student);
+  // console.log("info", prevStudent);
   const saveStudent = async () => {
+    const action = id ? "Updated Student Info Successfully!" : "Created New Student Successfully!"
+        
     try {
       let response;
-
+  
       if (id) {
         // Update existing student
         await updateStudent(id, student);
         response = { ...student, id };
-        console.log("Student updated:", response);
+        showNotification(action, "success");
+        console.log(action, response);
       } else {
         // Create new student
         response = await createStudent(student);
-        console.log("Student created:", response);
+        showNotification(action, "success");
+        console.log(action, response);
       }
-
+  
+      // Log all changes
+      if (!deepCompareObjects(prevStudent, student)) {
+        console.log('making log.......')
+        logAction(
+          user.userInfo.id, // Replace with actual admin ID
+          user.userInfo.name, // Replace with actual admin name
+          action,// Action
+          prevStudent, // Previous changes
+          student // cuurent change
+        );
+      }
+  
+      // Clear the temporary changes state
+      setprevStudent({});
+  
       return response;
     } catch (error) {
+      showNotification("Error saving student !", "error");
       console.error("Error saving student:", error);
       throw error; // Re-throw to allow caller to handle the error
     }
@@ -175,6 +206,7 @@ const StudentInfoManagementPage = () => {
   };
 
   const addNewField = (heading, value, section) => {
+    // Update the student state
     setStudent((prevStudent) => ({
       ...prevStudent,
       [section]: {
@@ -182,6 +214,9 @@ const StudentInfoManagementPage = () => {
         [heading.replaceAll(" ", "_")]: value || "NA",
       },
     }));
+
+    showNotification("New Field Added", "success");
+      
   };
 
   const editField = (section, oldHeading, newHeading, newValue) => {
@@ -205,6 +240,9 @@ const StudentInfoManagementPage = () => {
         [section]: updatedSection,
       };
     });
+
+    showNotification("field deleted", "warning");
+      
   };
 
   const meritColor = (point) => {
@@ -450,7 +488,7 @@ const StudentInfoManagementPage = () => {
               navigate("/admin-student_infoSelect", { replace: true });
             }}
             title="Confirm Student Save"
-            // message="Are you sure you want to delete this field?"
+            message="Are you sure you want to save the changes? They will be logged"
           />
         </div>
       ) : (

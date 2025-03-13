@@ -22,6 +22,7 @@ import StudentNavbar from "./Pages/Student/StudentNavbar";
 import AdminNavbar from "./Pages/Admin/AdminNavbar";
 import MaintenanceReport from "./Pages/Admin/Reports/RequestReports";
 import LogsPage from "./Pages/Admin/AdminLogs";
+import { Notification, NotificationProvider } from "./Components/Notification";
 
 export const MyStates = createContext();
 
@@ -69,15 +70,16 @@ const App = () => {
 
   useEffect(() => {
     if (userLoggedIn && currentUser) {
-      setUserInfo({})
-      console.log('obtaining from app')
+      setUserInfo({});
+      console.log("obtaining from app");
       getUser(currentUser.uid).then((response) => setUserInfo(response));
-    }
-    else{
-      setUserInfo({})
-      console.log('logged out plx')
+    } else {
+      setUserInfo({});
+      console.log("logged out plx");
     }
   }, [userLoggedIn, currentUser]);
+
+  // console.log("user", userInfo)
 
   const toggleTheme = () => {
     setIsChecked((curr) => (curr == false ? true : false));
@@ -85,71 +87,76 @@ const App = () => {
   const myStates = {
     myTheme: { isChecked, toggleTheme },
     student,
-    user: {userInfo , setUserInfo},
+    user: { userInfo, setUserInfo },
   };
   // const myTheme= { isChecked , toggleTheme }
 
   return (
     <MyStates.Provider value={myStates}>
-      <div className={`flex grow flex-col ${isChecked ? "dark" : "light"}`}>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/NotFound" element={<NotFound />} />
-          <Route path="/" element={<Login />} />
-          {/* Protected Routes */}
-          <Route element={<LogInRoute />}>
-            {/* Student Routes */}
-            <Route element={<StudentRoutes role={userInfo?.role} />}>
-              {/* Comment out from here to the protected routes comment if you dont want disturbances */}
-              <Route element={<StudentNavbar />}>
-                <Route path="/" element={<StudentSelection />} />
-                <Route
-                  path="/student-student_info/"
-                  element={<StudentInfoPage />}
-                />
+      <NotificationProvider>
+        <div className={`flex flex-col ${isChecked ? "dark" : "light"} min-w-dvw min-h-dvh`}>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/NotFound" element={<NotFound />} />
+            <Route path="/" element={<Login />} />
+            {/* Protected Routes */}
+            <Route element={<LogInRoute />}>
+              {/* Student Routes */}
+              <Route element={<StudentRoutes role={userInfo?.role} />}>
+                {/* Comment out from here to the protected routes comment if you dont want disturbances */}
+                <Route element={<StudentNavbar />}>
 
-                <Route
-                  path="/student-announcements"
-                  element={<AnnouncementsPage />}
-                />
-                <Route path="/student-requests" element={<RequestsPage />} />
-              </Route>
-            </Route>
+                  <Route path="/" element={<StudentSelection />} />
+                  <Route
+                    path="/student-student_info/"
+                    element={<StudentInfoPage />}
+                  />
 
-            {/* Admin Routes */}
-            <Route element={<AdminRoutes role={userInfo?.role} />}>
-              <Route element={<AdminNavbar />}>
-              <Route path="/Maintenance-Report" element={<MaintenanceReport />} />
-          
-                <Route
-                  path="/admin-student_infoSelect"
-                  element={<StudentInfoSelection />}
-                />
-                <Route
-                  path="/admin-student_info/:id"
-                  element={<StudentInfoManagementPage />}
-                />
-                <Route
-                  path="/admin-announcements"
-                  element={<AnnouncementsManagementPage />}
-                />
-                <Route
-                  path="/admin-requests"
-                  element={<RequestsManagementPage />}
-                />
-                <Route
-                  path="/admin-logs"
-                  element={<LogsPage/>}
-                />
+                  <Route
+                    path="/student-announcements"
+                    element={<AnnouncementsPage />}
+                  />
+                  <Route path="/student-requests" element={<RequestsPage />} />
+                
+                </Route>
               </Route>
 
-              {/* Comment these two route tags under as well */}
+              {/* Admin Routes */}
+              <Route element={<AdminRoutes role={userInfo?.role} />}>
+                <Route element={<AdminNavbar />}>
+                  <Route
+                    path="/Maintenance-Report"
+                    element={<MaintenanceReport />}
+                  />
+
+                  <Route
+                    path="/admin-student_infoSelect"
+                    element={<StudentInfoSelection />}
+                  />
+                  <Route
+                    path="/admin-student_info/:id"
+                    element={<StudentInfoManagementPage />}
+                  />
+                  <Route
+                    path="/admin-announcements"
+                    element={<AnnouncementsManagementPage />}
+                  />
+                  <Route
+                    path="/admin-requests"
+                    element={<RequestsManagementPage />}
+                  />
+                  <Route path="/admin-logs" element={<LogsPage />} />
+                </Route>
+
+                {/* Comment these two route tags under as well */}
+              </Route>
             </Route>
-          </Route>
-          {/* Catch-All Route for Unknown Pages */}
-          <Route path="*" element={<Navigate to="/NotFound" replace />} />
-        </Routes>
-      </div>
+            {/* Catch-All Route for Unknown Pages */}
+            <Route path="*" element={<Navigate to="/NotFound" replace />} />
+          </Routes>
+          <Notification/>
+        </div>
+      </NotificationProvider>
     </MyStates.Provider>
   );
 };

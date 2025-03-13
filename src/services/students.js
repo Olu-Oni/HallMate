@@ -36,11 +36,11 @@ const getUser = async (uID) => {
 const getAllStudents = async () => {
   try {
     const studentDocs = await getDocs(studentsCollectionRef);
-    console.log(studentDocs);
+    // console.log(studentDocs);
     const response = studentDocs.docs.map((doc) => {
       return { ...doc.data(), id: doc.id };
     }); // Return student data
-    console.log("my response ", response);
+    // console.log("my response ", response);
     return response;
   } catch (error) {
     console.error("Error fetching student:", error);
