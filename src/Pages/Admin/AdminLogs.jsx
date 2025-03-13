@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { collection, getDocs, query, orderBy, where } from "firebase/firestore";
-import { db } from "../../config/firebase";
+import { fetchLogs } from "../../services/logs"; // Import the fetchLogs function
 
 const LogsPage = () => {
   const [logs, setLogs] = useState([]);
@@ -14,40 +13,23 @@ const LogsPage = () => {
   });
 
   useEffect(() => {
-    const fetchLogs = async () => {
+    const getLogs = async () => {
       try {
-        let logsQuery = query(collection(db, "AdminLogs"), orderBy("timestamp", "desc"));
+        setLoading(true);
+        setError(null);
 
-        // Apply filters
-        if (filters.section) {
-          logsQuery = query(logsQuery, where("section", "==", filters.section));
-        }
-        if (filters.adminName) {
-          logsQuery = query(logsQuery, where("adminName", "==", filters.adminName));
-        }
-        if (filters.startDate && filters.endDate) {
-          logsQuery = query(
-            logsQuery,
-            where("timestamp", ">=", filters.startDate),
-            where("timestamp", "<=", filters.endDate)
-          );
-        }
-
-        const logsSnapshot = await getDocs(logsQuery);
-        const logsData = logsSnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
+        // Call the fetchLogs function with the current filters
+        const logsData = await fetchLogs(filters);
         setLogs(logsData);
-        setLoading(false);
       } catch (err) {
         console.error("Error fetching logs:", err);
         setError("Failed to load logs. Please try again later.");
+      } finally {
         setLoading(false);
       }
     };
 
-    fetchLogs();
+    getLogs();
   }, [filters]);
 
   const handleFilterChange = (e) => {

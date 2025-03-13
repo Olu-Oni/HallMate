@@ -100,13 +100,14 @@ const StudentInfoSelection = () => {
   const [searchText, setSearchText] = useState("");
 
   useEffect(() => {
+    
     getAllStudents()
     // remove filter when displayInfo error is fixed
       .then((response) => setStudents(response.filter(s=>s.displayInfo?s:null)))
       .catch((error) => console.error("Error fetching students:", error));
   }, []);
 
-  console.log(students);
+  // console.log(students);
 
   // **Search Filter**
   const searchedStudents = students

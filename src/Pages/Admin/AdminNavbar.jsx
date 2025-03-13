@@ -122,7 +122,7 @@ const AdminNavbar = () => {
   return (
     <>
 
-    <nav className="flex justify-between p-3 pt-4 pl-4  secondaryBg sticky ">
+    <nav className="flex justify-between p-3 pt-4 pl-4  primaryBg sticky border-b-2">
       <div className="flex logo">
         <h1 className="logo1 text-2xl font-medium">Hall</h1>
         <h1 className="logo2 text-2xl font-medium">Mate</h1>
