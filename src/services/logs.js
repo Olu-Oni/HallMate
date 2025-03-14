@@ -4,6 +4,7 @@ import {
   getDocs,
   query,
   orderBy,
+  where,
 } from "firebase/firestore";
 import { db } from "../config/firebase";
 
@@ -12,6 +13,7 @@ export const logAction = async (
   adminId,
   adminName,
   action,
+  section,
   prevState,
   currState
 ) => {
@@ -20,6 +22,7 @@ export const logAction = async (
     adminId,
     adminName,
     action,
+    section,
     prevState,
     currState,
   };
