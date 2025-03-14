@@ -8,7 +8,7 @@ import {
   updateStudent,
 } from "../../services/students";
 import { MyStates } from "../../App";
-import { deepCompareObjects } from "../../services/functions";
+import { deepCompareObjects } from "../../services/functions.js";
 import { logAction } from "../../services/logs";
 import { NotificationContext } from "../../Components/Notification";
 
@@ -120,10 +120,10 @@ const FieldModal = ({
 
 // Main Student Info Management Page
 const StudentInfoManagementPage = () => {
-  const myStates = useContext(MyStates)
+  const myStates = useContext(MyStates);
   const { showNotification } = useContext(NotificationContext);
 
-  const {user} = myStates
+  const { user } = myStates;
   // console.log(user.userInfo)
   const navigate = useNavigate();
   const [student, setStudent] = useState({
@@ -146,7 +146,7 @@ const StudentInfoManagementPage = () => {
               personalInfo: { ...prev.personalInfo, ...response.personalInfo },
               academicInfo: { ...prev.academicInfo, ...response.academicInfo },
             }));
-            setprevStudent(response)
+            setprevStudent(response);
           })
           .catch((error) => console.error("Error fetching students:", error))
       : null;
@@ -154,45 +154,55 @@ const StudentInfoManagementPage = () => {
 
   // console.log("info", prevStudent);
   const saveStudent = async () => {
-    const action = id ? "Updated Student Info Successfully!" : "Created New Student Successfully!"
-        
+    const action = id
+      ? "Update"
+      : "Create";
+
     try {
       let response;
-  
+
       if (id) {
         // Update existing student
         await updateStudent(id, student);
         response = { ...student, id };
         showNotification(action, "success");
-        console.log(action, response);
+        console.log(`${action}d Student Info  Successfully!`, response);
       } else {
         // Create new student
         response = await createStudent(student);
-        showNotification(action, "success");
+        showNotification(`${action}d New Student  Successfully!`, "success");
         console.log(action, response);
       }
-  
+
       // Log all changes
       if (!deepCompareObjects(prevStudent, student)) {
-        console.log('making log.......')
-        logAction(
+        console.log("making log.......");
+        await logAction(
           user.userInfo.id, // Replace with actual admin ID
           user.userInfo.name, // Replace with actual admin name
-          action,// Action
+          action, // Action
+          "Student Information",
           prevStudent, // Previous changes
           student // cuurent change
         );
       }
-  
+
       // Clear the temporary changes state
       setprevStudent({});
-  
+
       return response;
     } catch (error) {
       showNotification("Error saving student !", "error");
       console.error("Error saving student:", error);
       throw error; // Re-throw to allow caller to handle the error
     }
+  };
+
+  const saveAndExit = () => {
+    saveStudent().then(r=>
+      r?
+      navigate("/admin-student_infoSelect", { replace: true }):null
+    );
   };
 
   const changeStudentEntry = (section, heading, value) => {
@@ -216,7 +226,6 @@ const StudentInfoManagementPage = () => {
     }));
 
     showNotification("New Field Added", "success");
-      
   };
 
   const editField = (section, oldHeading, newHeading, newValue) => {
@@ -242,7 +251,6 @@ const StudentInfoManagementPage = () => {
     });
 
     showNotification("field deleted", "warning");
-      
   };
 
   const meritColor = (point) => {
@@ -255,9 +263,13 @@ const StudentInfoManagementPage = () => {
     <main className="min-h-screen primaryBg flex items-center justify-center p-4">
       {student ? (
         <div className="secondaryBg shadow-2xl rounded-2xl w-full max-w-4xl p-8 pt-2 ">
-          <Link to={'/admin-student_infoSelect'} className="m-3 font-semibold flex underline">
-          <ArrowBigLeft/>
-          back</Link>
+          <Link
+            to={"/admin-student_infoSelect"}
+            className="m-3 font-semibold flex underline"
+          >
+            <ArrowBigLeft />
+            back
+          </Link>
           <header className="flex flex-wrap items-center gap-8 mb-8">
             <UserCircle className="w-24 h-24" />
             <div className="w-full space-y-4">
@@ -483,9 +495,8 @@ const StudentInfoManagementPage = () => {
             isOpen={!!confirmSave}
             onClose={() => setConfirmSave(null)}
             onConfirm={() => {
-              saveStudent();
               setConfirmSave(null);
-              navigate("/admin-student_infoSelect", { replace: true });
+              saveAndExit();
             }}
             title="Confirm Student Save"
             message="Are you sure you want to save the changes? They will be logged"

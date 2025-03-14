@@ -17,6 +17,7 @@
     "@tailwindcss/vite": "^4.0.1",
     "axios": "^1.7.9",
     "firebase": "^11.3.1",
+    "jsondiffpatch": "^0.6.0",
     "lucide-react": "^0.477.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
