@@ -130,9 +130,9 @@ const StudentInfoSelection = () => {
       id: students.length + 1,
       displayInfo: {
         name: "New Student",
-        matrNo: "123456",
-        roomNo: "101",
-        merits: "0",
+        matrNo: "",
+        roomNo: "",
+        merits: "",
       },
     };
     setStudents([...students, newStudent]);
