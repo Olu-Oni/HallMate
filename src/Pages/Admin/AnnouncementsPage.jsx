@@ -618,7 +618,7 @@ const AnnouncementsPage = () => {
       <div className="flex max-md:flex-col flex-wrap items-center justify-between gap-4 mb-8">
         <h1 className="text-3xl font-bold">Announcements</h1>
         
-        <div className="flex w-full max-sm:flex-col justify-between p-4  gap-4">
+        <div className="flex w-full max-sm:flex-col justify-between p-4 gap-4">
           <ExpandableSearchBar 
             searchQuery={searchQuery} 
             setSearchQuery={setSearchQuery}

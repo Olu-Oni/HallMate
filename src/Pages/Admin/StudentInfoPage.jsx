@@ -127,7 +127,7 @@ const StudentInfoManagementPage = () => {
   // console.log(user.userInfo)
   const navigate = useNavigate();
   const [student, setStudent] = useState({
-    displayInfo: { name: "", matrNo: "", roomNo: "", merits: 0 },
+    displayInfo: { name: "", matrNo: "", roomNo: "", merits: 60 },
     personalInfo: {},
     academicInfo: {},
   });
@@ -155,8 +155,8 @@ const StudentInfoManagementPage = () => {
   // console.log("info", prevStudent);
   const saveStudent = async () => {
     const action = id
-      ? "Update"
-      : "Create";
+      ? "Updated Info"
+      : "Created New Student";
 
     try {
       let response;
@@ -166,11 +166,11 @@ const StudentInfoManagementPage = () => {
         await updateStudent(id, student);
         response = { ...student, id };
         showNotification(action, "success");
-        console.log(`${action}d Student Info  Successfully!`, response);
+        console.log(`${action}  Successfully!`, response);
       } else {
         // Create new student
         response = await createStudent(student);
-        showNotification(`${action}d New Student  Successfully!`, "success");
+        showNotification(`${action} Successfully!`, "success");
         console.log(action, response);
       }
 
@@ -181,7 +181,7 @@ const StudentInfoManagementPage = () => {
           user.userInfo.id, // Replace with actual admin ID
           user.userInfo.name, // Replace with actual admin name
           action, // Action
-          "Student Information",
+          "Student Management",
           prevStudent, // Previous changes
           student // cuurent change
         );

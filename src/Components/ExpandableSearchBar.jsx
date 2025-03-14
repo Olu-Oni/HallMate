@@ -50,7 +50,7 @@ const ExpandableSearchBar = ({ searchQuery, setSearchQuery, onSearch }) => {
   }, []);
 
   return (
-    <div ref={containerRef} className="w-full mr-2 mb-8">
+    <div ref={containerRef} className="w-full mr-2 ">
       <div
         className={` flex h-12 items-center secondaryBg backdrop-blur-md transition-all duration-300 ease-in-out border-2 border-gray-300 rounded-full ${
           isExpanded ? "w-[80%] md:w-96 px-4 py-2" : "w-12 "
