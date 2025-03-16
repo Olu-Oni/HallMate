@@ -127,7 +127,7 @@ const RequestsPage = () => {
   const issues = {
     electrical: ["Fans", "Sockets", "Light bulbs"],
     plumbing: ["Wash hand basin", "Shower", "Tap", "WC"],
-    carpentry: ["Broken beds", "Damaged lockers", "Damaged doors"],
+    carpentry: ["beds", "lockers", "doors"],
   };
 
   // Progress bar function

@@ -21,10 +21,10 @@ const RequestForm = ({
       ],
       plumbing: ["wash hand basin", "shower", "tap", "wc", "leakage"],
       carpentry: [
-        "broken beds",
-        "damaged lockers",
-        "damaged doors",
-        "broken chairs",
+        "beds",
+        "lockers",
+        "doors",
+        "chairs",
       ],
     };
   
