@@ -23,6 +23,7 @@ import AdminNavbar from "./Pages/Admin/AdminNavbar";
 import MaintenanceReport from "./Pages/Admin/Reports/RequestReports";
 import LogsPage from "./Pages/Admin/AdminLogs";
 import { Notification, NotificationProvider } from "./Components/Notification";
+import LandingPage from "./Pages/LandingPage"; // Import the new landing page
 
 export const MyStates = createContext();
 
@@ -62,11 +63,7 @@ const App = () => {
   // false = lightmode
   // true = darkmode
 
-  // useEffect(()=>{
-  //   getUser(id)
-  //   .then((response) => setStudent(response.data))
-  //   .catch((error) => console.error("Error fetching students:", error));
-  // }, [])
+  // useEffect(()=>{...existing code...}, [])
 
   useEffect(() => {
     if (userLoggedIn && currentUser) {
@@ -96,63 +93,32 @@ const App = () => {
       <NotificationProvider>
         <div className={`flex flex-col ${isChecked ? "dark" : "light"} min-w-dvw min-h-dvh`}>
           <Routes>
+            <Route path="/" element={<LandingPage />} /> {/* Add the landing page route */}
             <Route path="/login" element={<Login />} />
             <Route path="/NotFound" element={<NotFound />} />
-            <Route path="/" element={<Login />} />
             {/* Protected Routes */}
             <Route element={<LogInRoute />}>
               {/* Student Routes */}
               <Route element={<StudentRoutes role={userInfo?.role} />}>
                 {/* Comment out from here to the protected routes comment if you dont want disturbances */}
                 <Route element={<StudentNavbar />}>
-
                   <Route path="/" element={<StudentSelection />} />
-                  <Route
-                    path="/student-student_info/"
-                    element={<StudentInfoPage />}
-                  />
-
-                  <Route
-                    path="/student-announcements"
-                    element={<AnnouncementsPage />}
-                  />
+                  <Route path="/student-student_info/" element={<StudentInfoPage />} />
+                  <Route path="/student-announcements" element={<AnnouncementsPage />} />
                   <Route path="/student-requests" element={<RequestsPage />} />
-                
                 </Route>
               </Route>
-
               {/* Admin Routes */}
               <Route element={<AdminRoutes role={userInfo?.role} />}>
                 <Route element={<AdminNavbar />}>
-                  <Route
-                    path="/Maintenance-Report"
-                    element={<MaintenanceReport />}
-                  />
-
-                  <Route
-                    path="/admin-student_infoSelect"
-                    element={<StudentInfoSelection />}
-                  />
-                  <Route
-                    path="/admin-student_info/:id"
-                    element={<StudentInfoManagementPage />}
-                  />
-                   <Route
-                    path="/admin-student_info"
-                    element={<StudentInfoManagementPage />}
-                  />
-                  <Route
-                    path="/admin-announcements"
-                    element={<AnnouncementsManagementPage />}
-                  />
-                  <Route
-                    path="/admin-requests"
-                    element={<RequestsManagementPage />}
-                  />
+                  <Route path="/Maintenance-Report" element={<MaintenanceReport />} />
+                  <Route path="/admin-student_infoSelect" element={<StudentInfoSelection />} />
+                  <Route path="/admin-student_info/:id" element={<StudentInfoManagementPage />} />
+                  <Route path="/admin-student_info" element={<StudentInfoManagementPage />} />
+                  <Route path="/admin-announcements" element={<AnnouncementsManagementPage />} />
+                  <Route path="/admin-requests" element={<RequestsManagementPage />} />
                   <Route path="/admin-logs" element={<LogsPage />} />
                 </Route>
-
-                {/* Comment these two route tags under as well */}
               </Route>
             </Route>
             {/* Catch-All Route for Unknown Pages */}

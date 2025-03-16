@@ -29,6 +29,7 @@ export const logAction = async (
     currState,
   };
 
+  console.log(logEntry)
   await addDoc(collection(db, "AdminLogs"), logEntry);
 };
 

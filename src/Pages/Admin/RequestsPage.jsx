@@ -24,7 +24,6 @@ const RequestsManagementPage = () => {
   });
   const { showNotification } = useContext(NotificationContext);
   const { user } = useContext(MyStates);
-
   
   useEffect(() => {
     getAllRequests()
@@ -77,22 +76,17 @@ const RequestsManagementPage = () => {
       if (request) {
         const updatedRequest = { ...request, status: newStatus };
         updateRequest(id, updatedRequest)
-          .then(
+          .then((res) => {
             logAction(
-              async (res) =>
-                await logAction(
-                  "Admin",
-                  user.userinfo.id,
-                  user.userinfo.name,
-                  "status changed",
-                  "Request Management",
-                  request,
-                  res
-                )
-            )
-          )
-          .then(() => showNotification("Request status updated successfully", "success"))
-          .then(() => {
+              "Admin",
+              user.userInfo.id,
+              user.userInfo.name,
+              "status changed",
+              "Request Management",
+              request,
+              res
+            );
+            showNotification("Request status updated successfully", "success");
             setRequests((prevRequests) =>
               prevRequests.map((req) =>
                 requestIds.includes(req.id) ? { ...req, status: newStatus } : req
@@ -119,23 +113,18 @@ const RequestsManagementPage = () => {
 
     if (modalType === "edit") {
       const oldRequest = requests.find((req) => req.id === newRequest.id);
-      await updateRequest(newRequest.id, requestData)
-        .then(
+      updateRequest(newRequest.id, requestData)
+        .then((res) => {
           logAction(
-            async (res) =>
-              await logAction(
-                "Admin",
-                user.userinfo.id,
-                user.userinfo.name,
-                "Updated",
-                "Request Management",
-                oldRequest,
-                res
-              )
-          )
-        )
-        .then(() => showNotification("Request information updated successfully", "success"))
-        .then((response) => {
+            "Admin",
+            user.userInfo.id,
+            user.userInfo.name,
+            "Updated",
+            "Request Management",
+            requestData,
+            
+          );
+          showNotification("Request information updated successfully", "success");
           setRequests((prevRequests) =>
             prevRequests.map((req) =>
               req.id === newRequest.id ? { ...req, ...requestData } : req
@@ -143,29 +132,26 @@ const RequestsManagementPage = () => {
           );
         })
         .catch((error) => {
-          showNotification("Error editing request ", "error");
+          showNotification("Error editing request", "error");
           console.error("Error updating request:", error);
         });
     } else {
-      await createRequest(requestData)
+      createRequest(requestData)
         .then((res) => {
           logAction(
-            async (res) =>
-              await logAction(
-                "Admin",
-                user.userinfo.id,
-                user.userinfo.name,
-                "Created",
-                "Request Management",
-                null,
-                res
-              )
+            "Admin",
+            user.userInfo.id,
+            user.userInfo.name,
+            "Created",
+            "Request Management",
+            null,
+            res
           );
           showNotification("Request created successfully", "success");
           setRequests((prevRequests) => [...prevRequests, res]);
         })
         .catch((error) => {
-          showNotification("Error editing request ", "error");
+          showNotification("Error creating request", "error");
           console.error("Error creating request:", error);
         });
     }
@@ -177,20 +163,17 @@ const RequestsManagementPage = () => {
 
   const handleDelete = () => {
     selectedRequests.forEach((reqId) => {
-      console.log('request id', reqId, selectedRequests)  
+      const requestToDelete = requests.find((req) => req.id === reqId);
       deleteRequest(reqId)
-        .then((res) => {
+        .then(() => {
           logAction(
-            async () =>
-              await logAction(
-                "Admin",
-                user.userinfo.id,
-                user.userinfo.name,
-                "Deleted",
-                "Request Management",
-                selectedRequests,
-                null
-              )
+            "Admin",
+            user.userInfo.id,
+            user.userInfo.name,
+            "Deleted",
+            "Request Management",
+            requestToDelete,
+            null
           );
           showNotification("Request deleted successfully", "warning");
           setRequests((prevRequests) =>
@@ -198,10 +181,11 @@ const RequestsManagementPage = () => {
           );
         })
         .catch((error) => {
-          showNotification("Error deleting request ", "error");
+          showNotification("Error deleting request", "error");
           console.error(`Error deleting request ${reqId}:`, error);
         });
     });
+    
     setIsModalOpen(false);
     setSelectedRequests([]);
   };
