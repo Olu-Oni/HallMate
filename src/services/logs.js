@@ -10,6 +10,7 @@ import { db } from "../config/firebase";
 
 // Function to log actions
 export const logAction = async (
+  role,
   adminId,
   adminName,
   action,
@@ -19,7 +20,9 @@ export const logAction = async (
 ) => {
   const logEntry = {
     timestamp: new Date().toISOString(),
+    role,
     adminId,
+
     adminName,
     action,
     section,

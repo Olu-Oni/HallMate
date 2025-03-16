@@ -1,5 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+
 import { 
   getAuth, 
   setPersistence, 
@@ -31,6 +33,10 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+
+// Initialize storage
+const storage = getStorage(app);
+
 
 // Initialize authentication
 const auth = getAuth(app);
@@ -105,6 +111,6 @@ window.addEventListener('offline', () => {
   // Could show offline notification here
 });
 
-export { app, auth, db, getCurrentUser, isOnline };
+export { storage, db, ref, uploadBytes, getDownloadURL,app, auth, getCurrentUser, isOnline };
 
 // const analytics = getAnalytics(app);

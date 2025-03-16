@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { Link, useLocation, useParams, useNavigate, Outlet } from "react-router-dom";
 import LightDarkSwitch from "../../Components/LightDarkSwitch";
 import DoorIcon from "../../Components/svg/DoorIconSVG";
+import HMLogo from "../../assets/HallMateLogoFull.png";
 import { MyStates } from "../../App";
 import { getUser } from "../../services/students";
 import { doSignOut } from "../../config/auth";
@@ -29,7 +30,7 @@ const SlideMenu = ({ navNames, status }) => {
       <div
         className={
           isOpen
-            ? "slide-menu min-h-[380px] translate-x-[-150px] z-[1000]"
+            ? "slide-menu min-h-[380px] translate-x-[-150px] z-[1000] max-sm:translate-x-[-110px]"
             : "slide-menu min-h-[380px] translate-x-24 z-[1000]"
         }
       >
@@ -122,10 +123,11 @@ const AdminNavbar = () => {
   return (
     <>
 
-    <nav className="flex justify-between p-3 pt-4 pl-4  primaryBg sticky border-b-2">
-      <div className="flex logo">
-        <h1 className="logo1 text-2xl font-medium">Hall</h1>
-        <h1 className="logo2 text-2xl font-medium">Mate</h1>
+    <nav className="flex justify-between  pt-6 pl-4 z-[1001] primaryBg fixed w-full border-b-2">
+      <div className="flex relative logo h-fit">
+        {/* <h1 className="logo1 text-2xl font-medium">Hall</h1>
+        <h1 className="logo2 text-2xl font-medium">Mate</h1> */}
+        <img src={HMLogo} alt="HallMate Logo" className="relative bottom-3 h-14 sm:h-16 w-auto" />
       </div>
       <ul className="flex w-fit gap-[2%] grow text-center mx-14 md:mx-[7%] lg:mx-[12%] justify-around  max-md:hidden">
         {navNames.map((nav) => (

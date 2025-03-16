@@ -10,30 +10,34 @@ const LogDetailsModal = ({ log, onClose }) => {
   const delta = jsondiffpatch.diff(log.prevState, log.currState);
 
   // Custom function to extract differences
-  function extractDifferences(delta, path = '') {
+  function extractDifferences(delta, path = "") {
     if (!delta) return [];
-    
+
     const differences = [];
-    
+
     for (const key in delta) {
       const currentPath = path ? `${path}.${key}` : key;
       const change = delta[key];
-      
+
       // Changed value (array with 2 elements)
-      if (Array.isArray(change) && change.length === 2 && typeof change[2] === 'undefined') {
+      if (
+        Array.isArray(change) &&
+        change.length === 2 &&
+        typeof change[2] === "undefined"
+      ) {
         differences.push({
           path: currentPath,
           oldValue: change[0],
           newValue: change[1],
-          type: 'modified'
+          type: "modified",
         });
-      } 
+      }
       // Nested object
-      else if (typeof change === 'object' && !Array.isArray(change)) {
+      else if (typeof change === "object" && !Array.isArray(change)) {
         differences.push(...extractDifferences(change, currentPath));
       }
     }
-    
+
     return differences;
   }
 
@@ -43,13 +47,14 @@ const LogDetailsModal = ({ log, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center p-4">
-      <div className="bg-white rounded-lg p-6 max-w-4xl w-full max-h-[90vh] flex flex-col">
+      <div className="primaryBg rounded-lg p-6 max-w-4xl w-full max-h-[90vh] flex flex-col">
         <h2 className="text-xl font-bold mb-4">Log Details</h2>
 
         {/* Basic Log Info */}
         <div className="space-y-2 mb-6">
           <div>
-            <strong>Timestamp:</strong> {new Date(log.timestamp).toLocaleString()}
+            <strong>Timestamp:</strong>{" "}
+            {new Date(log.timestamp).toLocaleString()}
           </div>
           <div>
             <strong>Admin Name:</strong> {log.adminName}
@@ -75,11 +80,15 @@ const LogDetailsModal = ({ log, onClose }) => {
                   <div className="grid grid-cols-2 gap-2 mt-1">
                     <div className="bg-red-50 p-2 rounded">
                       <span className="text-xs text-red-600">Previous:</span>
-                      <div className="mt-1">{JSON.stringify(diff.oldValue)}</div>
+                      <div className="mt-1">
+                        {JSON.stringify(diff.oldValue)}
+                      </div>
                     </div>
                     <div className="bg-green-50 p-2 rounded">
                       <span className="text-xs text-green-600">Current:</span>
-                      <div className="mt-1">{JSON.stringify(diff.newValue)}</div>
+                      <div className="mt-1">
+                        {JSON.stringify(diff.newValue)}
+                      </div>
                     </div>
                   </div>
                 </li>
@@ -92,13 +101,13 @@ const LogDetailsModal = ({ log, onClose }) => {
         <div className="flex gap-6 overflow-y-auto flex-1 flex-wrap">
           <div className="flex-1">
             <h3 className="font-semibold mb-2">Previous State</h3>
-            <pre className="bg-gray-100 p-2 rounded text-sm overflow-x-auto">
+            <pre className="secondaryBg p-2 rounded text-sm overflow-x-auto">
               {JSON.stringify(log.prevState, null, 2)}
             </pre>
           </div>
           <div className="flex-1">
             <h3 className="font-semibold mb-2">Current State</h3>
-            <pre className="bg-gray-100 p-2 rounded text-sm overflow-x-auto">
+            <pre className="secondaryBg p-2 rounded text-sm overflow-x-auto">
               {JSON.stringify(log.currState, null, 2)}
             </pre>
           </div>
@@ -126,7 +135,7 @@ const LogsPage = () => {
     endDate: "",
   });
 
-  console.log(selectedLog)
+  console.log(selectedLog);
   const { setNotification, showNotification } = useContext(NotificationContext);
 
   useEffect(() => {
@@ -174,40 +183,48 @@ const LogsPage = () => {
 
       {/* Filters */}
       <div className="mb-6 space-y-4">
-        <div className="flex flex-wrap gap-4">
+        <div className="flex flex-wrap gap-4 items-end">
           <select
             name="section"
             value={filters.section}
             onChange={handleFilterChange}
-            className="p-2 border rounded"
+            className="p-2 border rounded secondaryBg h-fit"
           >
             <option value="">All Sections</option>
             <option value="Student Info">Student Info</option>
             <option value="Maintenance Requests">Maintenance Requests</option>
             <option value="Announcements">Announcements</option>
           </select>
+
           <input
             type="text"
             name="adminName"
             placeholder="Filter by Admin Name"
             value={filters.adminName}
             onChange={handleFilterChange}
-            className="p-2 border rounded"
+            className="p-2 border rounded secondaryBg h-fit"
           />
-          <input
-            type="date"
-            name="startDate"
-            value={filters.startDate}
-            onChange={handleFilterChange}
-            className="p-2 border rounded"
-          />
-          <input
-            type="date"
-            name="endDate"
-            value={filters.endDate}
-            onChange={handleFilterChange}
-            className="p-2 border rounded"
-          />
+
+          <label className="flex flex-col">
+            Start Date
+            <input
+              type="date"
+              name="startDate"
+              value={filters.startDate}
+              onChange={handleFilterChange}
+              className="p-2 border rounded secondaryBg h-fit"
+            />
+          </label>
+          <label className="flex flex-col">
+            End Date
+            <input
+              type="date"
+              name="endDate"
+              value={filters.endDate}
+              onChange={handleFilterChange}
+              className="p-2 border rounded secondaryBg h-fit"
+            />
+          </label>
         </div>
       </div>
 
@@ -215,7 +232,7 @@ const LogsPage = () => {
       <div className="overflow-x-auto">
         <table className="w-full border-collapse">
           <thead>
-            <tr className="bg-gray-100">
+            <tr className="secondaryBg">
               <th className="p-2 px-4 border text-left">Timestamp</th>
               <th className="p-2 border text-left text-nowrap">Admin Name</th>
               <th className="p-2 border text-left">Action</th>

@@ -34,8 +34,8 @@ import {
       // Add timestamp to request data
       const requestWithTimestamp = {
         ...requestData,
-        createdAt: new Date().toLocaleDateString("en-GB"),
-        updatedAt: new Date().toLocaleDateString("en-GB"),
+        createdAt:  new Date().toISOString(), // Save the date in ISO 8601 format
+        updatedAt:  new Date().toISOString(), // Save the date in ISO 8601 format
         // createdAt: serverTimestamp(),
         // updatedAt: serverTimestamp()
       };
@@ -118,7 +118,7 @@ import {
       // Add updated timestamp
       const dataWithTimestamp = {
         ...updateData,
-        updatedAt: serverTimestamp()
+        updatedAt:  new Date().toISOString(), // Save the date in ISO 8601 format
       };
       
       await updateDoc(requestDocRef, dataWithTimestamp);

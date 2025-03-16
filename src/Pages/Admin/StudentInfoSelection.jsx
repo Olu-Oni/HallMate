@@ -128,14 +128,14 @@ const HallDashboard = ({ hallData }) => {
   const occupancyRate = (hallData.occupiedRooms / hallData.capacity) * 100;
   
   return (
-    <div className="secondaryBg rounded-lg shadow p-6 my-8">
+    <div className="secondaryBg rounded-lg shadow p-6 pb-2 my-8">
       <h2 className="text-2xl font-bold mb-6 flex items-center">
-        <Home className="mr-2" /> {hallData.name} Dashboard
+        <Home className="mr-2" /> {hallData.name} 
       </h2>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">*/}
         {/* Occupancy Card */}
-        <div className="bg-blue-50 p-4 rounded-lg">
+       {/* <div className="bg-blue-50 p-4 rounded-lg">
           <div className="flex justify-between items-center mb-2">
             <h3 className="font-semibold text-blue-800">Occupancy</h3>
             <span className="text-blue-600 font-bold">{occupancyRate.toFixed(1)}%</span>
@@ -172,24 +172,24 @@ const HallDashboard = ({ hallData }) => {
         </div> */}
         
         {/* Merits Card */}
-        <div className="bg-yellow-50 p-4 rounded-lg">
+        {/* <div className="bg-yellow-50 p-4 rounded-lg">
           <h3 className="font-semibold text-yellow-800 mb-2">Hall Performance</h3>
           <div className="space-y-2">
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-600">Average Merit Score</span>
-              <span className="font-medium">{hallData.averageMeritScore}</span>
+              <span className="font-medium text-gray-600">{hallData.averageMeritScore}</span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-600">Maintenance Requests</span>
-              <span className="font-medium">{hallData.maintenanceRequests}</span>
+              <span className="font-medium text-gray-600">{hallData.maintenanceRequests}</span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-600">Upcoming Events</span>
-              <span className="font-medium">{hallData.upcomingEvents}</span>
+              <span className="font-medium text-gray-600">{hallData.upcomingEvents}</span>
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

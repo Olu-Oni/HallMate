@@ -104,8 +104,8 @@ const createStudent = async (studentData) => {
     // Add timestamps to student data
     const studentWithTimestamp = {
       ...studentData,
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp(),
+      createdAt:  new Date().toISOString(), // Save the date in ISO 8601 format
+      updatedAt:  new Date().toISOString(), // Save the date in ISO 8601 format
     };
 
     // Add the document to Firestore
@@ -135,7 +135,7 @@ const updateStudent = async (studentId, updateData) => {
     // Add updated timestamp
     const dataWithTimestamp = {
       ...updateData,
-      updatedAt: serverTimestamp(),
+      updatedAt: new Date().toISOString(),
     };
 
     await updateDoc(studentDocRef, dataWithTimestamp);

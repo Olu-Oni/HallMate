@@ -28,8 +28,7 @@ export const NotificationProvider = ({ children }) => {
 export const Notification = () => {
     const { notification } = useContext(NotificationContext);
   
-    if (!notification) console.log('yYYYYYYYYYYYYYYYYYYY');
-    if (!notification) return null;
+   if (!notification) return null;
   
     // Define styles based on the notification type
     const notificationStyles = {

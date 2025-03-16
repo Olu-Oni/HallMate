@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { collection, getDocs, query, where, orderBy } from 'firebase/firestore';
-import { db } from '../../../config/firebase';
-import { Card, CardHeader, CardBody, CardTitle, Button, FormGroup, Label, Input } from 'reactstrap'; // Reactstrap components
+import { Card, CardHeader, CardBody, CardTitle, Button, FormGroup, Input } from 'reactstrap'; // Reactstrap components
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { getAllRequests } from '../../../services/requests'; // Import the service to fetch requests
 import { ArrowBigLeft } from 'lucide-react';
@@ -29,6 +27,7 @@ const MaintenanceReport = () => {
       try {
         // Fetch all requests from the service
         const requestsData = await getAllRequests();
+        console.log('requestsData:', requestsData); // Log the fetched data
 
         // Filter requests based on the selected date range
         const now = new Date();
@@ -42,10 +41,15 @@ const MaintenanceReport = () => {
           startDate.setFullYear(now.getFullYear() - 1);
         }
 
+        console.log('startDate:', startDate); // Log the start date for filtering
+
         const filteredRequests = requestsData.filter(req => {
           const reqDate = new Date(req.createdAt);
+          console.log('reqDate:', reqDate); // Log each request date
           return reqDate >= startDate;
         });
+
+        console.log('filteredRequests:', filteredRequests); // Log the filtered requests
 
         // Count by status
         const totalRequests = filteredRequests.length;

@@ -64,7 +64,9 @@
   color: var(--primary-text);
   @apply p-0 m-0;
 }
-
+main{
+  @apply mt-24;
+}
 a,
 input,
 button {
@@ -124,7 +126,7 @@ td .logo1 {
 /* slide-Menu */
 .slide-menu {
   background-color: var(--primary-bg-color);
-  @apply fixed top-0 transition-transform duration-300 ease-out  w-[220px] rounded-bl-3xl pt-20;
+  @apply fixed top-0 transition-transform duration-300 ease-out  w-[220px] max-sm:w-[180px] rounded-bl-3xl pt-20;
 }
 
 /* nav items */
