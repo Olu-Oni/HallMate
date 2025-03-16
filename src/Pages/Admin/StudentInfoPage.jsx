@@ -5,6 +5,7 @@ import UserCircle from "../../Components/svg/UserCircle";
 import {
   createStudent,
   getStudentWithoutUser,
+  handleSaveStudent,
   updateStudent,
 } from "../../services/students";
 import { MyStates } from "../../App";
@@ -134,6 +135,7 @@ const StudentInfoManagementPage = () => {
   const [editingField, setEditingField] = useState(null);
   const [confirmDelete, setConfirmDelete] = useState(null);
   const [confirmSave, setConfirmSave] = useState(null);
+  const [email, setEmail] = useState(""); // New state for email
   const { id } = useParams();
   const [prevStudent, setprevStudent] = useState({});
 
@@ -169,21 +171,30 @@ const StudentInfoManagementPage = () => {
         console.log(`${action}  Successfully!`, response);
       } else {
         // Create new student
-        response = await createStudent(student);
-        showNotification(`${action} Successfully!`, "success");
-        console.log(action, response);
+        if (!email) {
+          showNotification("Email is required for new students", "error");
+          return;
+        }
+        try {
+          await handleSaveStudent(student, email);
+          showNotification(`${action} Successfully and email sent!`, "success");
+        } catch (error) {
+          console.error("Error saving student:", error);
+          alert("Error saving student");
+        }
       }
 
       // Log all changes
       if (!deepCompareObjects(prevStudent, student)) {
         console.log("making log.......");
         await logAction(
+          "admin",
           user.userInfo.id, // Replace with actual admin ID
           user.userInfo.name, // Replace with actual admin name
           action, // Action
           "Student Management",
           prevStudent, // Previous changes
-          student // cuurent change
+          student // current change
         );
       }
 
@@ -329,7 +340,24 @@ const StudentInfoManagementPage = () => {
               </div>
             </div>
           </header>
-
+{/* Email Input for New Students */}
+{!id && (
+            <section className="mb-8">
+              <h2 className="text-2xl font-bold border-b pb-2 mb-4">
+                Student Email
+              </h2>
+              <div className="flex items-center space-x-4">
+                <label className="font-semibold">Email:</label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="min-w-32 sm:w-[45%] px-3 py-2 border rounded-md focus:ring-2 primaryBg focus:ring-blue-500 focus:outline-none"
+                  required
+                />
+              </div>
+            </section>
+          )}
           {/* Personal Information Section */}
           <section className="mb-8">
             <h2 className="text-2xl font-bold border-b pb-2 mb-4">
@@ -449,6 +477,8 @@ const StudentInfoManagementPage = () => {
               </button>
             </div>
           </section>
+
+          
 
           <div className="border-t border-solid border-gray-200 w-full mt-5 p-4 relative">
             {" "}

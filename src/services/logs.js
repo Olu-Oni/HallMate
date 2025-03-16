@@ -22,7 +22,6 @@ export const logAction = async (
     timestamp: new Date().toISOString(),
     role,
     adminId,
-
     adminName,
     action,
     section,

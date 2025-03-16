@@ -11,6 +11,11 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 import { db } from "../config/firebase";
+import { getFunctions, httpsCallable } from "firebase/functions";
+
+const functions = getFunctions();
+const sendWelcomeEmail = httpsCallable(functions, "sendWelcomeEmail");
+
 
 const studentsCollectionRef = collection(db, "Students");
 const usersCollectionRef = collection(db, "Users");
@@ -94,26 +99,31 @@ const getStudentWithoutUser = async (uID) => {
 /**
  * Creates a new student in the Students collection
  * @param {Object} studentData - Data for the new student
- * @param {Object} studentData.displayInfo - Display information (name, matrNo, etc.)
- * @param {Object} studentData.personalInfo - Personal information
- * @param {Object} studentData.academicInfo - Academic information
+ * @param {string} email - Email address of the new student
  * @returns {Promise<Object>} - The created student with its ID
  */
-const createStudent = async (studentData) => {
+const createStudent = async (studentData, email, randomPassword) => {
   try {
     // Add timestamps to student data
     const studentWithTimestamp = {
       ...studentData,
-      createdAt:  new Date().toISOString(), // Save the date in ISO 8601 format
-      updatedAt:  new Date().toISOString(), // Save the date in ISO 8601 format
+      createdAt: new Date().toISOString(), // Save the date in ISO 8601 format
+      updatedAt: new Date().toISOString(), // Save the date in ISO 8601 format
     };
 
-    // Add the document to Firestore
-    const studentDocRef = await addDoc(
-      studentsCollectionRef,
-      studentWithTimestamp
-    );
+    // Add the student document to Firestore
+    const studentDocRef = await addDoc(studentsCollectionRef, studentWithTimestamp);
 
+    // Create a user document with the email and random password
+    const userDocRef = await addDoc(usersCollectionRef, {
+      email,
+      password: randomPassword,
+      profileRef: studentDocRef,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    });
+
+    
     // Return the created student with its ID
     return { id: studentDocRef.id, ...studentWithTimestamp };
   } catch (error) {
@@ -121,6 +131,19 @@ const createStudent = async (studentData) => {
     throw error;
   }
 };
+
+// save student and send email
+export const handleSaveStudent = async (studentData, email) => {
+  try {
+    const randomPassword = Math.random().toString(36).slice(-8);
+    await createStudent(studentData, email, randomPassword);
+    await sendWelcomeEmail({ email, password: randomPassword });
+    console.log("Student created and email sent");
+  } catch (error) {
+    console.error("Error creating student or sending email:", error);
+  }
+};
+
 
 /**
  * Updates a student's information
