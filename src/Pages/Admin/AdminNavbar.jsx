@@ -123,7 +123,7 @@ const AdminNavbar = () => {
   return (
     <>
 
-    <nav className="flex justify-between  pt-6 pl-4 z-[1001] primaryBg fixed w-full border-b-2">
+    <nav className="flex justify-between  pt-6 pl-4 z-[30] primaryBg fixed w-full border-b-2">
       <div className="flex relative logo h-fit">
         {/* <h1 className="logo1 text-2xl font-medium">Hall</h1>
         <h1 className="logo2 text-2xl font-medium">Mate</h1> */}

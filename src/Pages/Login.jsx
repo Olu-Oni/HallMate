@@ -93,7 +93,7 @@ const Login = () => {
   console.log(userLoggedIn)
   
   return (
-    <main>
+    <main className="h-dvh m-0">
       {userLoggedIn &&
         (userInfo.role === "admin" ? (
           <Navigate to="/admin-student_infoSelect" replace={true} />
@@ -101,13 +101,13 @@ const Login = () => {
           <Navigate to="/student-student_info/" replace={true} />
         ) : null)}
 
-      <div className="flex items-center justify-center gap-14 h-screen w-full primaryBg">
+      <div className="flex items-center justify-center gap-14 h-full w-full primaryBg">
         <div className="hidden sm:block text-center w-fit ">
           <img className="" src={loginImg} alt="" />
           {/* Student */}
         </div>
 
-        <div className="flex flex-col justify-center mr-5 basis-[40%]">
+        <div className="flex flex-col justify-center md:mr-5 basis-[40%]">
           {!showResetForm ? (
             <form
               className="max-w-[400px] w-full mx-auto rounded-lg border-2 border-gray-200 p-8 px-8"

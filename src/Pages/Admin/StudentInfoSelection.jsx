@@ -13,7 +13,7 @@ const StudentRow = ({ student, position, id }) => {
   const studentLocation = `/admin-student_info/${id}`;
   return (
     <tr className={`${isEven ? "secondaryBg" : "primaryBg"} `}>
-      <td className="p-3 border-b">
+      <td className="p-3 border-b text-left">
         <Link
           to={studentLocation}
           className="flex items-center "
@@ -21,7 +21,7 @@ const StudentRow = ({ student, position, id }) => {
           {student.name || "-"}
         </Link>
       </td>
-      <td className="p-3 border-b">
+      <td className="p-3 border-b text-left" >
         <Link
           to={studentLocation}
           className=""
@@ -29,7 +29,7 @@ const StudentRow = ({ student, position, id }) => {
           {student.matrNo || "-"}
         </Link>
       </td>
-      <td className="p-3 border-b">
+      <td className="p-3 border-b text-left">
         <Link
           to={studentLocation}
           className=""
@@ -37,7 +37,7 @@ const StudentRow = ({ student, position, id }) => {
           {student.roomNo || "-"}
         </Link>
       </td>
-      <td className="p-3 border-b">
+      <td className="p-3 border-b text-left">
         <Link
           to={studentLocation}
           className="text-gray-700"
@@ -56,7 +56,7 @@ const StudentRow = ({ student, position, id }) => {
 
 const StudentList = ({ students }) => {
   return (
-    <div className="my-6 overflow-hidden tertiaryBg rounded-lg shadow">
+    <div className="my-6 overflow-x-auto tertiaryBg rounded-lg shadow">
       <table className="border-collapse w-full">
         <thead>
           <tr className="primaryBg text-left">
@@ -114,7 +114,7 @@ const StudentList = ({ students }) => {
 
 // Sample Hall data
 const hallData = {
-  name: "Nelson Mandela",
+  name: "Bethel Splendor Hall",
   capacity: 500,
   gender:"Male",
   occupiedRooms: 427,
@@ -248,6 +248,7 @@ const StudentInfoSelection = () => {
               <ExpandableSearchBar
                 searchQuery={searchText}
                 setSearchQuery={setSearchText}
+                placeholder="Search for a student..."
                 onSearch={null}
               />
             </div>

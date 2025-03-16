@@ -18,7 +18,9 @@ export const NotificationProvider = ({ children }) => {
   };
 
   return (
-    <NotificationContext.Provider value={{ notification, setNotification, showNotification }}>
+    <NotificationContext.Provider
+      value={{ notification, setNotification, showNotification }}
+    >
       {children}
     </NotificationContext.Provider>
   );
@@ -26,28 +28,27 @@ export const NotificationProvider = ({ children }) => {
 
 // Notification component
 export const Notification = () => {
-    const { notification } = useContext(NotificationContext);
-  
-   if (!notification) return null;
-  
-    // Define styles based on the notification type
-    const notificationStyles = {
-      info: "text-blue-500 ",
-      success: "text-green-500 ",
-      warning: "text-yellow-600 ",
-      error: "text-red-500 ",
-    };
-    if (notification)
-    return (
-        <div className="fixed w-full top-16">
+  const { notification } = useContext(NotificationContext);
 
-      <div
-        className={`mx-auto text-center w-fit p-4 px-6 outline outline-1 rounded-md primaryBg transition-transform translate-y-4 shadow-lg ${
-          notificationStyles[notification.type]
-        }`}
-      >
-        {notification.message}
-      </div>
-        </div>
-    );
+  if (!notification) return null;
+
+  // Define styles based on the notification type
+  const notificationStyles = {
+    info: "text-blue-500 ",
+    success: "text-green-500 ",
+    warning: "text-yellow-600 ",
+    error: "text-red-500 ",
   };
+  if (notification)
+    return (
+      <div className="fixed w-full top-20">
+        <div
+          className={`mx-auto text-center w-fit p-4 px-6 outline outline-1 rounded-md primaryBg transition-transform translate-y-4 shadow-lg ${
+            notificationStyles[notification.type]
+          }`}
+        >
+          {notification.message}
+        </div>
+      </div>
+    );
+};

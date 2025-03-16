@@ -245,14 +245,14 @@ const LogsPage = () => {
               <tr
                 key={log.id}
                 onClick={() => setSelectedLog(log)}
-                className="cursor-pointer hover:bg-gray-100"
+                className="cursor-pointer "
               >
-                <td className="p-2 border">
+                <td className="p-2 border text-left">
                   {new Date(log.timestamp).toLocaleString()}
                 </td>
-                <td className="p-2 border">{log.adminName}</td>
-                <td className="p-2 border">{log.action}</td>
-                <td className="p-2 border">{log.section}</td>
+                <td className="p-2 border text-left">{log.adminName}</td>
+                <td className="p-2 border text-left">{log.action}</td>
+                <td className="p-2 border text-left">{log.section}</td>
               </tr>
             ))}
           </tbody>

@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth"
+import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, sendPasswordResetEmail } from "firebase/auth"
 import { auth } from "./firebase"
 
 
@@ -22,5 +22,5 @@ export const doSignOut = () => {
  * @returns {Promise<void>} - A promise that resolves when the reset email is sent
  */
 export const doPasswordReset = (email) => {
-    return auth.sendPasswordResetEmail(email);
+    return sendPasswordResetEmail(auth, email);
   };

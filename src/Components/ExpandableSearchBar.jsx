@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Search } from "lucide-react";
 
-const ExpandableSearchBar = ({ searchQuery, setSearchQuery, onSearch }) => {
+const ExpandableSearchBar = ({ searchQuery, setSearchQuery, placeholder, onSearch }) => {
   // State to track if the search bar is expanded
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -70,7 +70,7 @@ const ExpandableSearchBar = ({ searchQuery, setSearchQuery, onSearch }) => {
         <input
           ref={inputRef}
           type="text"
-          placeholder="Search announcements..."
+          placeholder={placeholder?placeholder:"Search announcements..."}
           value={searchQuery}
           onChange={handleSearchChange}
           className={`w-full pl-12 pr-4 py-2  bg-transparent rounded-full focus:outline-none transition-all duration-300 ${
