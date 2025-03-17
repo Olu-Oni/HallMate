@@ -53,7 +53,10 @@ import {
   const getAllAnnouncements = async () => {
     try {
       const announcementDocs = await getDocs(announcementsCollectionRef);
-      return announcementDocs.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      console.log('docs',announcementDocs)
+      return announcementDocs.docs.map(doc => {
+        console.log('doc id',doc.id)
+        return({ id: doc.id, ...doc.data() })});
     } catch (error) {
       console.error("Error fetching all announcements:", error);
       throw error;

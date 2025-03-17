@@ -214,7 +214,6 @@ const NewAnnouncementModal = ({ isOpen, onClose, onSave }) => {
   
       // Create the announcement object
       const newAnnouncement = {
-        id: Date.now(), // Temporary ID (will be replaced by Firestore ID)
         title,
         content,
         category: categories,
@@ -1056,78 +1055,6 @@ const AnnouncementsPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [showNewAnnouncementForm, setShowNewAnnouncementForm] = useState(false);
   const [announcements, setAnnouncements] = useState([
-    // {
-    //   id: 1,
-    //   title: "Scheduled power outage",
-    //   date: "February 20, 2025",
-    //   category: ["Pinned", "Maintenance"],
-    //   content:
-    //     "Due to maintenance on the schools generators, there will be a power outage from 11pm - 5am till further notice, Please prepare accordingly and make necessary arrangements.",
-    //   sender: "Hall Administrator",
-    // },
-    // {
-    //   id: 2,
-    //   title: "Scheduled Water Supply Interruption",
-    //   date: "February 20, 2025",
-    //   category: ["Pinned", "Maintenance"],
-    //   content:
-    //     "Due to necessary plumbing maintenance, water supply will be temporarily unavailable from 9:00 AM to 3:00 PM in Blocks A and B. Please store enough water in advance.",
-    //   sender: "Maintenance Department",
-    // },
-    // {
-    //   id: 3,
-    //   title: "Hall week",
-    //   date: "February 20, 2025",
-    //   category: ["Pinned", "Events"],
-    //   content:
-    //     "Hall week begins on saturday the 15th between 9AM and 4:30PM. Please prepare yourselves, organise your rooms and remain fully dressed at all times.",
-    //   sender: "Hall Council",
-    // },
-    // {
-    //   id: 4,
-    //   title: "Check-Out Procedure for End of Semester",
-    //   date: "February 20, 2025",
-    //   category: ["Latest", "General Notice"],
-    //   content:
-    //     "All students must complete the check-out process and vacate the hall of residence by April 30. Please return your room keys to the porters and ensure your room is cleaned before departure. Failure to do so may result in your page being blocked.",
-    //   sender: "Residence Office",
-    // },
-    // {
-    //   id: 5,
-    //   title: "Hall worship",
-    //   date: "February 20, 2025",
-    //   category: ["Events"],
-    //   content:
-    //     "Hall worship holds every tuesday from 6:10pm - 7:10pm. Please be punctual as signing in ends by 6:25pm.",
-    //   sender: "Spiritual Life Coordinator",
-    // },
-    // {
-    //   id: 6,
-    //   title: "Sabbath hours",
-    //   date: "February 15, 2025",
-    //   category: ["Events"],
-    //   content:
-    //     "As we are all aware, sabbath begins 5pm on fridays till 7pm saturday, Please remove all clothes from the line, Refrain from using your laptops and playing loud music, always remember to keep the sabbath day holy.",
-    //   sender: "Spiritual Life Coordinator",
-    // },
-    // {
-    //   id: 7,
-    //   title: "Room Inspection",
-    //   date: "March 25, 2025",
-    //   category: ["General Notice"],
-    //   content:
-    //     "Routine room inspections will take place from 10:00 AM to 4:00 PM. Please ensure your rooms are clean and comply with hostel regulations. Any violations may result in demertis.",
-    //   sender: "Hall Administration",
-    // },
-    // {
-    //   id: 8,
-    //   title: "Curfew Reminder",
-    //   date: "March 27, 2025",
-    //   category: ["General Notice"],
-    //   content:
-    //     "General reminder that curfew remains 9:45pm, please return to the hall before the afore mentioned time ",
-    //   sender: "Security Office",
-    // },
   ]);
 
   const categories = [
@@ -1141,18 +1068,23 @@ const AnnouncementsPage = () => {
 
 
   useEffect(() => {
-    getAllAnnouncements()
-          .then((response) => {
-            setAnnouncements(response)
-            console.log(announcements)
-          })
-          .catch((error) => console.error("Error fetching students:", error))
-      
+      const fetchAnnouncements = async () => {
+        try {
+          const announcements = await getAllAnnouncements();
+          setAnnouncements(announcements);
+        } catch (error) {
+          console.error("Error fetching announcements:", error);
+          showNotification("Failed to fetch announcements!", "error");
+        }
+      };
+    
+      fetchAnnouncements();
   }, []);
 
- 
+ console.log('announcements', announcements)
 
   const handleDeleteAnnouncement = async () => {
+    console.log('announcment to delete', announcementToDelete)
     try {
       // Delete the announcement from Firestore
       await deleteAnnouncement(announcementToDelete.id);
@@ -1234,6 +1166,7 @@ const AnnouncementsPage = () => {
   
       // Log the action
       await logAction(
+        "Admin",
         userInfo.id, // Admin ID
         userInfo.name, // Admin name
         "Created Announcement", // Action
