@@ -35,6 +35,7 @@ const RequestsManagementPage = () => {
     setNewRequest({
       roomNo: "",
       amenity: "",
+      desc: "",
       issue: "",
       otherIssue: "",
       status: "Pending",
@@ -54,6 +55,7 @@ const RequestsManagementPage = () => {
         id: requestToEdit.id,
         roomNo: requestToEdit.roomNo,
         amenity: requestToEdit.type,
+        desc: requestToEdit.desc,
         issue: requestToEdit.issue,
         otherIssue: requestToEdit.issue,
         status: requestToEdit.status,

@@ -46,7 +46,7 @@ const LogDetailsModal = ({ log, onClose }) => {
   console.log("Differences:", differences);
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center p-4">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center p-4 z-[100]">
       <div className="primaryBg rounded-lg p-6 max-w-4xl w-full max-h-[90vh] flex flex-col">
         <h2 className="text-xl font-bold mb-4">Log Details</h2>
 

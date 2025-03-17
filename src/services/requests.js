@@ -92,10 +92,10 @@ import {
    * @param {string} roomId - ID of the room to get requests for
    * @returns {Promise<Array>} - Array of requests for the specified room
    */
-  const getRequestsByRoom = async (roomId) => {
+  const getRequestsByRoom = async (roomNo) => {
     try {
       // Create a query against the collection
-      const q = query(requestsCollectionRef, where("roomId", "==", roomId));
+      const q = query(requestsCollectionRef, where("roomNo", "==", roomNo));
       const querySnapshot = await getDocs(q);
       
       return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));

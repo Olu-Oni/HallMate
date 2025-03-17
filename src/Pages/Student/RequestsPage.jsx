@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useAuth } from "../../contexts/authContext";
 import { getStudent } from "../../services/students";
-import { createRequest, getAllRequests } from "../../services/requests";
+import { createRequest, getAllRequests, getRequestsByRoom } from "../../services/requests";
 import { NotificationContext } from "../../Components/Notification";
 import { logAction } from "../../services/logs";
 
@@ -26,6 +26,7 @@ const RequestsPage = () => {
     roomNo: "",
     type: "",
     issue: "",
+    desc: "",
     otherIssue: "",
     status: "Pending",
   });
@@ -47,6 +48,7 @@ const RequestsPage = () => {
       student: student?.displayInfo?.name || "",
       type: "",
       issue: "",
+      desc: "",
       otherIssue: "",
       status: "Pending",
     });
@@ -55,7 +57,8 @@ const RequestsPage = () => {
   // Existing requests (temporary example data)
   const [requests, setRequests] = useState([]);
   useEffect(() => {
-    getAllRequests()
+    student &&
+    getRequestsByRoom(student.displayInfo.roomNo)
       .then((response) => {
         setRequests(response);
         console.log(requests);
@@ -67,7 +70,7 @@ const RequestsPage = () => {
         );
         console.error("Error fetching requests:", error);
       });
-  }, []);
+  }, [student]);
 
   // State to control the modal visibility
   const [isModalOpen, setIsModalOpen] = useState(false);
