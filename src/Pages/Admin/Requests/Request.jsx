@@ -2,10 +2,10 @@ import React from "react";
 
 const Request = ({ request, selected, onSelect }) => {
   const requestData = request || {
-    type: "electrical",
-    issue: "light bulbs",
-    date: "21-02-2025",
-    roomNo: "202",
+    type: "",
+    issue: "",
+    date: "",
+    roomNo: "",
   };
 
   const date = new Date(requestData.createdAt); // Convert to Date object

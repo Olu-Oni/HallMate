@@ -117,6 +117,7 @@ const createStudent = async (studentData, email, randomPassword) => {
     // Create a user document with the email and random password
     const userDocRef = await addDoc(usersCollectionRef, {
       email,
+      role: "student",
       password: randomPassword,
       profileRef: studentDocRef,
       createdAt: new Date().toISOString(),

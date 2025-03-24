@@ -124,7 +124,9 @@ const StudentNavbar = () => {
          <div className="flex relative logo h-fit">
            {/* <h1 className="logo1 text-2xl font-medium">Hall</h1>
            <h1 className="logo2 text-2xl font-medium">Mate</h1> */}
+           <Link to={`/`}>
            <img src={HMLogo} alt="HallMate Logo" className="relative bottom-3 h-14 sm:h-16 w-auto" />
+           </Link>
          </div>
       <ul className="flex w-fit gap-[2%] grow text-center mx-14 md:mx-[7%] lg:mx-[12%] justify-around  max-md:hidden">
         {navNames.map((nav) => (

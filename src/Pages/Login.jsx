@@ -31,6 +31,7 @@ const Login = () => {
         setIsSigningIn(true);
         setErrorMessage("");
         await doSignInUserWithEmailAndPassword(email, password);
+        setIsSigningIn(false);
         console.log('somm going on here too')
       } catch (err) {
         console.error("login error", err);

@@ -24,6 +24,8 @@ import MaintenanceReport from "./Pages/Admin/Reports/RequestReports";
 import LogsPage from "./Pages/Admin/AdminLogs";
 import { Notification, NotificationProvider } from "./Components/Notification";
 import LandingPage from "./Pages/LandingPage"; // Import the new landing page
+import { generateToken } from "./config/firebase";
+import { ToastContainer } from "react-toastify";
 
 export const MyStates = createContext();
 
@@ -31,29 +33,29 @@ export const MyStates = createContext();
 const user = {
   role: "admin",
 };
-const student = {
-  displayInfo: {
-    name: "Jhon Doe",
-    matrNo: "21/3188",
-    roomNo: "B27",
-    merits: 30,
-  },
-  Personal_Info: {
-    Full_Name: "Jhon Micheal Doe",
-    Hall: "Bethel Splendor",
-    Phone_No: "07080718065",
-    Date_of_Birth: "27/Sept/2004",
-    Home_Address: "Omole, Lagos",
-    State: "Ekiti",
-    Religion: "Christrian",
-    Nationality: "Nigerian",
-  },
-  Academic_Info: {
-    Course_of_Study: "Information Technology",
-    Department: "information Technology",
-    Faculty: "Computing and Engineering Sciences",
-  },
-};
+// const student = {
+//   displayInfo: {
+//     name: "Jhon Doe",
+//     matrNo: "21/3188",
+//     roomNo: "B27",
+//     merits: 30,
+//   },
+//   Personal_Info: {
+//     Full_Name: "Jhon Micheal Doe",
+//     Hall: "Bethel Splendor",
+//     Phone_No: "07080718065",
+//     Date_of_Birth: "27/Sept/2004",
+//     Home_Address: "Omole, Lagos",
+//     State: "Ekiti",
+//     Religion: "Christrian",
+//     Nationality: "Nigerian",
+//   },
+//   Academic_Info: {
+//     Course_of_Study: "Information Technology",
+//     Department: "information Technology",
+//     Faculty: "Computing and Engineering Sciences",
+//   },
+// };
 
 const App = () => {
   const { userLoggedIn, currentUser } = useAuth();
@@ -65,11 +67,15 @@ const App = () => {
 
   // useEffect(()=>{...existing code...}, [])
 
+
   useEffect(() => {
     if (userLoggedIn && currentUser) {
       setUserInfo({});
       console.log("obtaining from app");
       getUser(currentUser.uid).then((response) => setUserInfo(response));
+      
+      // notification permission
+      generateToken();
     } else {
       setUserInfo({});
       console.log("logged out plx");
@@ -83,13 +89,13 @@ const App = () => {
   };
   const myStates = {
     myTheme: { isChecked, toggleTheme },
-    student,
     user: { userInfo, setUserInfo },
   };
   // const myTheme= { isChecked , toggleTheme }
 
   return (
     <MyStates.Provider value={myStates}>
+      <ToastContainer/>
       <NotificationProvider>
         <div className={`flex flex-col ${isChecked ? "dark" : "light"} min-w-dvw min-h-dvh`}>
           <Routes>

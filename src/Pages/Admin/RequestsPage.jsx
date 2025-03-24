@@ -108,6 +108,7 @@ const RequestsManagementPage = () => {
     e.preventDefault();
     const requestData = {
       roomNo: newRequest.roomNo,
+      desc: newRequest.desc,
       type: newRequest.amenity,
       issue: newRequest.amenity === "others" ? newRequest.otherIssue : newRequest.issue,
       status: "Pending",

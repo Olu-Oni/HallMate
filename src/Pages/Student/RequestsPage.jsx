@@ -24,11 +24,11 @@ const RequestsPage = () => {
   // State for new maintenance request
   const [newRequest, setNewRequest] = useState({
     roomNo: "",
-    type: "",
-    issue: "",
-    desc: "",
-    otherIssue: "",
-    status: "Pending",
+    amenity: "",
+      desc: "",
+      issue: "",
+      otherIssue: "",
+      status: "Pending",
   });
 
   // Update newRequest when student is fetched
@@ -46,9 +46,9 @@ const RequestsPage = () => {
     setNewRequest({
       roomNo: student?.displayInfo?.roomNo || "",
       student: student?.displayInfo?.name || "",
-      type: "",
-      issue: "",
+      amenity: "",
       desc: "",
+      issue: "",
       otherIssue: "",
       status: "Pending",
     });
@@ -86,7 +86,8 @@ const RequestsPage = () => {
     const newEntry = {
       roomNo: newRequest.roomNo,
       student: newRequest.student,
-      type: newRequest.type,
+      desc: newRequest.desc,
+      type: newRequest.amenity,
       issue:
         newRequest.type === "others" ? newRequest.otherIssue : newRequest.issue,
       status: "Pending",
@@ -106,7 +107,7 @@ const RequestsPage = () => {
       )
       .then((res) => {
         showNotification("Request Submitted", "success");
-
+        console.log('request made', res);
         setRequests((prevRequests) => [...prevRequests, res]);
       })
       .catch((error) =>
@@ -127,21 +128,47 @@ const RequestsPage = () => {
     setIsModalOpen(false); // Close the modal
   };
 
-  const issues = {
-    electrical: ["Fans", "Sockets", "Light bulbs"],
-    plumbing: ["Wash hand basin", "Shower", "Tap", "WC"],
-    carpentry: ["beds", "lockers", "doors"],
+  // Appliance and specific issue options
+
+  const appliances = {
+    electrical: [
+      "fans",
+      "sockets",
+      "light bulbs",
+      "wiring",
+      "circuit breakers",
+    ],
+    plumbing: ["wash hand basin", "shower", "tap", "wc", "leakage"],
+    carpentry: [
+      "beds",
+      "lockers",
+      "doors",
+      "chairs",
+    ],
   };
+
+  const specificIssues = {
+    electrical: ["not working", "sparking", "loose connection", "flickering"],
+    plumbing: ["leaking", "clogged", "broken", "low pressure"],
+    carpentry: ["broken", "damaged", "loose", "squeaky"],
+  };
+
+  const mergeIssue = (appliance, specificIssue) => {
+    return `${appliance} - ${specificIssue}`;
+  };
+
 
   // Progress bar function
   const getStatusProgress = (status) => {
     switch (status) {
       case "Pending":
-        return 25;
-      case "In Progress":
-        return 50;
+        return {length:0, color:"bg-grey-500"};
+      case "Reviewed":
+        return {length:50, color:"bg-blue-500"};
       case "Completed":
-        return 100;
+        return {length: 100, color:"bg-green-500"};
+      case "Cancelled":
+        return {length:100, color:"bg-red-500"};
       default:
         return 0;
     }
@@ -176,11 +203,13 @@ const RequestsPage = () => {
             </label>
             <select
               id="amenity"
-              value={newRequest.type}
+              value={newRequest.amenity}
               onChange={(e) =>
                 setNewRequest({
                   ...newRequest,
-                  type: e.target.value,
+                  amenity: e.target.value,
+                appliance: "",
+                specificIssue: "",
                   issue: "",
                 })
               }
@@ -195,51 +224,114 @@ const RequestsPage = () => {
             </select>
           </div>
 
-          {/* Issue Selection (if not 'others') */}
-          {newRequest.type && newRequest.type !== "others" && (
-            <div>
-              <label htmlFor="issue" className="block text-sm font-medium ">
-                Issue
-              </label>
-              <select
-                id="issue"
-                value={newRequest.issue}
-                onChange={(e) =>
-                  setNewRequest({ ...newRequest, issue: e.target.value })
-                }
-                className="mt-1 block w-full border secondaryBg border-gray-300 rounded-md shadow-sm p-2"
-                required
-              >
-                <option value="">Select an issue</option>
-                {issues[newRequest.type].map((issue) => (
-                  <option key={issue} value={issue}>
-                    {issue}
-                  </option>
-                ))}
-              </select>
-            </div>
-          )}
-
-          {/* Other Issue (if 'others' is selected) */}
-          {newRequest.type === "others" && (
-            <div>
-              <label
-                htmlFor="otherIssue"
-                className="block text-sm font-medium "
-              >
-                Describe the issue
-              </label>
-              <textarea
-                id="otherIssue"
-                value={newRequest.otherIssue}
-                onChange={(e) =>
-                  setNewRequest({ ...newRequest, otherIssue: e.target.value })
-                }
-                className="mt-1 block w-full primaryBg border border-gray-300 rounded-md shadow-sm p-2"
-                required
-              />
-            </div>
-          )}
+          
+        {/* Appliance Selection (if not 'others') */}
+        {newRequest.amenity && newRequest.amenity !== "others" && (
+          <div>
+            <label htmlFor="appliance" className="block text-sm font-medium mb-1">
+              Appliance
+            </label>
+            <select
+              id="appliance"
+              value={newRequest.appliance}
+              onChange={(e) =>
+                setNewRequest({
+                  ...newRequest,
+                  appliance: e.target.value,
+                  issue: mergeIssue(e.target.value, newRequest.specificIssue),
+                })
+              }
+              className="block w-full max-w-md border secondaryBg border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
+              required
+            >
+              <option value="">Select an appliance</option>
+              {appliances[newRequest.amenity]?.map((appliance) => (
+                <option key={appliance} value={appliance}>
+                  {appliance}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+  
+        {/* Specific Issue Selection (if not 'others') */}
+        {newRequest.amenity && newRequest.amenity !== "others" && (
+          <div>
+            <label
+              htmlFor="specificIssue"
+              className="block text-sm font-medium mb-1"
+            >
+              Specific Issue
+            </label>
+            <select
+              id="specificIssue"
+              value={newRequest.specificIssue}
+              onChange={(e) =>
+                setNewRequest({
+                  ...newRequest,
+                  specificIssue: e.target.value,
+                  issue: mergeIssue(newRequest.appliance, e.target.value),
+                })
+              }
+              className="block w-full max-w-md border secondaryBg border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
+              required
+            >
+              <option value="">Select a specific issue</option>
+              {specificIssues[newRequest.amenity]?.map((specificIssue) => (
+                <option key={specificIssue} value={specificIssue}>
+                  {specificIssue}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+  
+        {/* Other Issue (if 'others' is selected) */}
+        {newRequest.amenity === "others" && (
+          <div>
+            <label
+              htmlFor="otherIssue"
+              className="block text-sm font-medium  mb-1"
+            >
+              Describe the issue
+            </label>
+            <textarea
+              id="otherIssue"
+              value={newRequest.otherIssue}
+              onChange={(e) =>
+                setNewRequest({ ...newRequest, otherIssue: e.target.value })
+              }
+              className="block w-full border secondaryBg border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
+              rows="3"
+              required
+            />
+          </div>
+        )}
+        {/* Additional description */}
+        {newRequest.amenity != "others" && (
+          <div>
+            <label
+              htmlFor="additionalDesc"
+              className="block text-sm font-medium mb-1"
+            >
+              Additional descriptions on the issue{" "}
+              <strong>
+                {" "}
+                <i className="text-nowrap">( if any )</i>
+              </strong>
+            </label>
+            <textarea
+              id="additionalDesc"
+              value={newRequest.desc}
+              onChange={(e) =>
+                setNewRequest({ ...newRequest, desc: e.target.value })
+              }
+              className="block w-full border secondaryBg border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
+              rows="2"
+              placeholder="fill here..."
+            />
+          </div>
+        )}
 
           <button
             type="submit"
@@ -269,11 +361,9 @@ const RequestsPage = () => {
                 <div className="w-full bg-slate-300 rounded-full h-4 mt-2">
                   <div
                     className={`h-4 rounded-full ${
-                      request.status === "Completed"
-                        ? "bg-green-500"
-                        : "bg-blue-500"
+                      getStatusProgress(request.status).color
                     }`}
-                    style={{ width: `${getStatusProgress(request.status)}%` }}
+                    style={{ width: `${getStatusProgress(request.status).length}%` }}
                   ></div>
                 </div>
               </div>

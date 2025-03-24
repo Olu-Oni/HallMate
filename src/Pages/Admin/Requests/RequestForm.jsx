@@ -192,7 +192,7 @@ const RequestForm = ({
               id="additionalDesc"
               value={newRequest.desc}
               onChange={(e) =>
-                setNewRequest({ ...newRequest, otherIssue: e.target.value })
+                setNewRequest({ ...newRequest, desc: e.target.value })
               }
               className="block w-full border secondaryBg border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
               rows="2"
