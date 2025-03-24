@@ -9,11 +9,12 @@ import RequestCategory from "./Requests/RequestCategory";
 import RequestForm from "./Requests/RequestForm";
 import Modal from "./Requests/Modal";
 
+// Main component for managing maintenance requests
 const RequestsManagementPage = () => {
-  const [requests, setRequests] = useState([]);
-  const [selectedRequests, setSelectedRequests] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalType, setModalType] = useState(null);
+  const [requests, setRequests] = useState([]); // State to store all requests
+  const [selectedRequests, setSelectedRequests] = useState([]); // State to store selected requests
+  const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
+  const [modalType, setModalType] = useState(null); // State to store the type of modal (new, edit, delete)
   const [newRequest, setNewRequest] = useState({
     roomNo: "",
     amenity: "",
@@ -21,16 +22,18 @@ const RequestsManagementPage = () => {
     desc: "",
     otherIssue: "",
     status: "Pending",
-  });
-  const { showNotification } = useContext(NotificationContext);
-  const { user } = useContext(MyStates);
+  }); // State to store new request data
+  const { showNotification } = useContext(NotificationContext); // Context for showing notifications
+  const { user } = useContext(MyStates); // Context for user information
   
+  // Fetch all requests on component mount
   useEffect(() => {
     getAllRequests()
       .then((response) => setRequests(response))
       .catch((error) => console.error("Error fetching requests:", error));
   }, []);
 
+  // Reset new request form
   const resetNewRequest = () => {
     setNewRequest({
       roomNo: "",
@@ -42,12 +45,14 @@ const RequestsManagementPage = () => {
     });
   };
 
+  // Open modal for creating a new request
   const openNewRequestModal = () => {
     resetNewRequest();
     setModalType("new");
     setIsModalOpen(true);
   };
 
+  // Open modal for editing an existing request
   const openEditModal = (requestId) => {
     const requestToEdit = requests.find((req) => req.id === requestId);
     if (requestToEdit) {
@@ -65,6 +70,7 @@ const RequestsManagementPage = () => {
     }
   };
 
+  // Open modal for deleting selected requests
   const openDeleteModal = () => {
     if (selectedRequests.length > 0) {
       setModalType("delete");
@@ -72,6 +78,7 @@ const RequestsManagementPage = () => {
     }
   };
 
+  // Handle status change for selected requests
   const handleChangeStatus = (requestIds, newStatus) => {
     requestIds.forEach((id) => {
       const request = requests.find((req) => req.id === id);
@@ -104,6 +111,7 @@ const RequestsManagementPage = () => {
     setSelectedRequests([]);
   };
 
+  // Handle form submission for creating or editing a request
   const handleSubmit = async (e) => {
     e.preventDefault();
     const requestData = {
@@ -125,7 +133,6 @@ const RequestsManagementPage = () => {
             "Updated",
             "Request Management",
             requestData,
-            
           );
           showNotification("Request information updated successfully", "success");
           setRequests((prevRequests) =>
@@ -164,6 +171,7 @@ const RequestsManagementPage = () => {
     setSelectedRequests([]);
   };
 
+  // Handle deletion of selected requests
   const handleDelete = () => {
     selectedRequests.forEach((reqId) => {
       const requestToDelete = requests.find((req) => req.id === reqId);
@@ -193,6 +201,7 @@ const RequestsManagementPage = () => {
     setSelectedRequests([]);
   };
 
+  // Close the modal
   const closeModal = () => {
     setIsModalOpen(false);
     setModalType(null);
