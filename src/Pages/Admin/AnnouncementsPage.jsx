@@ -16,7 +16,6 @@ import { NotificationContext } from "../../Components/Notification";
 import { logAction } from "../../services/logs";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage, db } from "../../config/firebase";
-// Add this import at the top with your other Firebase imports
 import {
   collection,
   addDoc,
@@ -137,21 +136,23 @@ const NewAnnouncementModal = ({ isOpen, onClose, onSave }) => {
 
   const categoryOptions = [
     "Pinned",
-    // "Latest",
     "General Notice",
     "Maintenance",
     "Events",
   ];
 
+  // Handle drag over event
   const handleDragOver = (e) => {
     e.preventDefault();
     setIsDragging(true);
   };
 
+  // Handle drag leave event
   const handleDragLeave = () => {
     setIsDragging(false);
   };
 
+  // Handle drop event
   const handleDrop = (e) => {
     e.preventDefault();
     setIsDragging(false);
@@ -160,23 +161,27 @@ const NewAnnouncementModal = ({ isOpen, onClose, onSave }) => {
     handleFiles(droppedFiles);
   };
 
+  // Handle file input change
   const handleFileInput = (e) => {
     const selectedFiles = Array.from(e.target.files);
     handleFiles(selectedFiles);
   };
 
+  // Handle files
   const handleFiles = (newFiles) => {
     // Limit total files to 5
     const updatedFiles = [...files, ...newFiles].slice(0, 5);
     setFiles(updatedFiles);
   };
 
+  // Remove file
   const removeFile = (index) => {
     const updatedFiles = [...files];
     updatedFiles.splice(index, 1);
     setFiles(updatedFiles);
   };
 
+  // Toggle category selection
   const toggleCategory = (category) => {
     if (categories.includes(category)) {
       setCategories(categories.filter((c) => c !== category));
@@ -185,6 +190,7 @@ const NewAnnouncementModal = ({ isOpen, onClose, onSave }) => {
     }
   };
 
+  // Validate form
   const validateForm = () => {
     const errors = {};
 
@@ -197,6 +203,7 @@ const NewAnnouncementModal = ({ isOpen, onClose, onSave }) => {
     return Object.keys(errors).length === 0;
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
   
@@ -239,7 +246,6 @@ const NewAnnouncementModal = ({ isOpen, onClose, onSave }) => {
     }
   };
 
-  console.log(files);
   if (!isOpen) return null;
 
   return (
@@ -444,6 +450,7 @@ const NewAnnouncementModal = ({ isOpen, onClose, onSave }) => {
   );
 };
 
+// Edit Announcement Form Modal
 const EditAnnouncementModal = ({
   isOpen,
   onClose,
@@ -478,15 +485,18 @@ const EditAnnouncementModal = ({
     "Events",
   ];
 
+  // Handle drag over event
   const handleDragOver = (e) => {
     e.preventDefault();
     setIsDragging(true);
   };
 
+  // Handle drag leave event
   const handleDragLeave = () => {
     setIsDragging(false);
   };
 
+  // Handle drop event
   const handleDrop = (e) => {
     e.preventDefault();
     setIsDragging(false);
@@ -495,23 +505,27 @@ const EditAnnouncementModal = ({
     handleFiles(droppedFiles);
   };
 
+  // Handle file input change
   const handleFileInput = (e) => {
     const selectedFiles = Array.from(e.target.files);
     handleFiles(selectedFiles);
   };
 
+  // Handle files
   const handleFiles = (newFiles) => {
     // Limit total files to 5
     const updatedFiles = [...files, ...newFiles].slice(0, 5);
     setFiles(updatedFiles);
   };
 
+  // Remove file
   const removeFile = (index) => {
     const updatedFiles = [...files];
     updatedFiles.splice(index, 1);
     setFiles(updatedFiles);
   };
 
+  // Toggle category selection
   const toggleCategory = (category) => {
     if (categories.includes(category)) {
       setCategories(categories.filter((c) => c !== category));
@@ -520,6 +534,7 @@ const EditAnnouncementModal = ({
     }
   };
 
+  // Validate form
   const validateForm = () => {
     const errors = {};
 
@@ -532,6 +547,7 @@ const EditAnnouncementModal = ({
     return Object.keys(errors).length === 0;
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
   
