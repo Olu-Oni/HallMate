@@ -45,7 +45,10 @@ export const fetchLogs = async (filters = {}) => {
       logsQuery = query(logsQuery, where("section", "==", filters.section));
     }
     if (filters.adminName) {
-      logsQuery = query(logsQuery, where("adminName", "==", filters.adminName));
+      console.log('doing name')
+      logsQuery = query(logsQuery, // Convert both to lowercase for comparison
+        where("adminNameLowercase", "==", filters.adminName.toLowerCase()));
+
     }
     if (filters.startDate && filters.endDate) {
       logsQuery = query(

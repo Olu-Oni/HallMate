@@ -135,7 +135,7 @@ const LogsPage = () => {
     endDate: "",
   });
 
-  console.log(selectedLog);
+  // console.log(selectedLog);
   const { setNotification, showNotification } = useContext(NotificationContext);
 
   useEffect(() => {
@@ -144,35 +144,45 @@ const LogsPage = () => {
         // setLoading(true);
         // setError(null);
 
-        showNotification("Loading logs...", "warning");
-
         // Call the fetchLogs function with the current filters
-        const logsData = await fetchLogs(filters);
-        setLogs(logsData);
-        showNotification("Load Successful", "success");
+        
+        if(!filters.adminName){
+          showNotification("Loading logs...", "warning");
+          const logsData = await fetchLogs(filters);
+          setLogs(logsData);
+          showNotification("Load Successful", "success");
+        }
       } catch (err) {
         console.error("Error fetching logs:", err);
         showNotification(
           "Failed to load logs. Please Check your connection",
           "error"
         );
-      } finally {
-        setLoading(false);
       }
     };
 
     getLogs();
   }, [filters]);
 
-  console.log(logs);
+  // console.log(logs);
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
+    // console.log('value', value, name)
     setFilters((prevFilters) => ({
       ...prevFilters,
       [name]: value,
     }));
   };
+
+  const searchedLogs = logs
+  ? logs.filter((log) => {
+      const name = log.adminName;
+      return name.toLowerCase().includes(filters.adminName.toLowerCase());
+    })
+  : [];
+
+  console.log('searchedLogs', searchedLogs);
 
   // if (loading) return <div className="p-4">Loading logs...</div>;
   // if (error) return <div className="p-4 text-red-500">{error}</div>;
@@ -191,8 +201,8 @@ const LogsPage = () => {
             className="p-2 border rounded secondaryBg h-fit"
           >
             <option value="">All Sections</option>
-            <option value="Student Info">Student Info</option>
-            <option value="Maintenance Requests">Maintenance Requests</option>
+            <option value="Student Management">Student Info</option>
+            <option value="Request Management">Maintenance Requests</option>
             <option value="Announcements">Announcements</option>
           </select>
 
@@ -241,7 +251,7 @@ const LogsPage = () => {
             </tr>
           </thead>
           <tbody>
-            {logs.map((log) => (
+            {searchedLogs.map((log) => (
               <tr
                 key={log.id}
                 onClick={() => setSelectedLog(log)}

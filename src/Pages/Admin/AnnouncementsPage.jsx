@@ -16,15 +16,12 @@ import { NotificationContext } from "../../Components/Notification";
 import { logAction } from "../../services/logs";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage, db } from "../../config/firebase";
-// Add this import at the top with your other Firebase imports
 import {
-  collection,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-  doc,
-} from "firebase/firestore";
-import { createAnnouncement, deleteAnnouncement, getAllAnnouncements, updateAnnouncement } from "../../services/announcements";
+  createAnnouncement,
+  deleteAnnouncement,
+  getAllAnnouncements,
+  updateAnnouncement,
+} from "../../services/announcements";
 
 // Modal for displaying full announcement details
 const AnnouncementModal = ({ announcement, onClose }) => {
@@ -199,9 +196,9 @@ const NewAnnouncementModal = ({ isOpen, onClose, onSave }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     if (!validateForm()) return;
-  
+
     try {
       // Upload files to Firebase Storage
       const fileUrls = await Promise.all(
@@ -211,7 +208,7 @@ const NewAnnouncementModal = ({ isOpen, onClose, onSave }) => {
           return getDownloadURL(storageRef);
         })
       );
-  
+
       // Create the announcement object
       const newAnnouncement = {
         title,
@@ -230,7 +227,7 @@ const NewAnnouncementModal = ({ isOpen, onClose, onSave }) => {
           url,
         })),
       };
-  
+
       // Call the onSave function to save the announcement
       onSave(newAnnouncement);
     } catch (error) {
@@ -444,12 +441,7 @@ const NewAnnouncementModal = ({ isOpen, onClose, onSave }) => {
   );
 };
 
-const EditAnnouncementModal = ({
-  isOpen,
-  onClose,
-  onSave,
-  announcement,
-}) => {
+const EditAnnouncementModal = ({ isOpen, onClose, onSave, announcement }) => {
   const [title, setTitle] = useState(announcement?.title || "");
   const [content, setContent] = useState(announcement?.content || "");
   const [categories, setCategories] = useState(announcement?.category || []);
@@ -471,12 +463,7 @@ const EditAnnouncementModal = ({
     }
   }, [announcement]);
 
-  const categoryOptions = [
-    "Pinned",
-    "General Notice",
-    "Maintenance", 
-    "Events",
-  ];
+  const categoryOptions = ["Pinned", "General Notice", "Maintenance", "Events"];
 
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -534,9 +521,9 @@ const EditAnnouncementModal = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     if (!validateForm()) return;
-  
+
     try {
       // Upload new files to Firebase Storage
       const fileUrls = await Promise.all(
@@ -552,7 +539,7 @@ const EditAnnouncementModal = ({
           };
         })
       );
-  
+
       // Create the updated announcement object
       const updatedAnnouncement = {
         ...announcement,
@@ -561,10 +548,10 @@ const EditAnnouncementModal = ({
         category: categories,
         attachments: fileUrls,
       };
-  
+
       // Call the onSave function to update the announcement
       onSave(updatedAnnouncement);
-  
+
       // Close the modal
       onClose();
     } catch (error) {
@@ -673,9 +660,7 @@ const EditAnnouncementModal = ({
 
               {/* Sender - Read only */}
               <div>
-                <label className="block text-sm font-medium mb-1">
-                  Sender
-                </label>
+                <label className="block text-sm font-medium mb-1">Sender</label>
                 <input
                   type="text"
                   className="w-full p-3 border rounded-md primaryBg cursor-not-allowed"
@@ -739,7 +724,9 @@ const EditAnnouncementModal = ({
                             {file.name}
                           </span>
                           <span className="text-xs text-gray-500">
-                            {file.size ? (file.size / 1024).toFixed(1) + " KB" : ""}
+                            {file.size
+                              ? (file.size / 1024).toFixed(1) + " KB"
+                              : ""}
                           </span>
                         </div>
                         <button
@@ -918,7 +905,13 @@ const AnnouncementCard = ({ announcement, onClick, onEdit, onDelete }) => {
 };
 
 // Category Section with Carousel Navigation
-const CategorySection = ({ category, announcements, onAnnouncementClick, onEdit, onDelete }) => {
+const CategorySection = ({
+  category,
+  announcements,
+  onAnnouncementClick,
+  onEdit,
+  onDelete,
+}) => {
   const [scrollPosition, setScrollPosition] = useState(0);
   const carouselRef = React.useRef(null);
 
@@ -1048,14 +1041,14 @@ const AnnouncementsPage = () => {
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [announcementToDelete, setAnnouncementToDelete] = useState(null);
 
-  const [showEditAnnouncementForm, setShowEditAnnouncementForm] = useState(false);
+  const [showEditAnnouncementForm, setShowEditAnnouncementForm] =
+    useState(false);
   const [announcementToEdit, setAnnouncementToEdit] = useState(null);
 
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [showNewAnnouncementForm, setShowNewAnnouncementForm] = useState(false);
-  const [announcements, setAnnouncements] = useState([
-  ]);
+  const [announcements, setAnnouncements] = useState([]);
 
   const categories = [
     "Pinned",
@@ -1065,35 +1058,33 @@ const AnnouncementsPage = () => {
     "Events",
   ];
 
-
-
   useEffect(() => {
-      const fetchAnnouncements = async () => {
-        try {
-          const announcements = await getAllAnnouncements();
-          setAnnouncements(announcements);
-        } catch (error) {
-          console.error("Error fetching announcements:", error);
-          showNotification("Failed to fetch announcements!", "error");
-        }
-      };
-    
-      fetchAnnouncements();
+    const fetchAnnouncements = async () => {
+      try {
+        const announcements = await getAllAnnouncements();
+        setAnnouncements(announcements);
+      } catch (error) {
+        console.error("Error fetching announcements:", error);
+        showNotification("Failed to fetch announcements!", "error");
+      }
+    };
+
+    fetchAnnouncements();
   }, []);
 
- console.log('announcements', announcements)
+  console.log("announcements", announcements);
 
   const handleDeleteAnnouncement = async () => {
-    console.log('announcment to delete', announcementToDelete)
+    console.log("announcment to delete", announcementToDelete);
     try {
       // Delete the announcement from Firestore
       await deleteAnnouncement(announcementToDelete.id);
-  
+
       // Update the local state
       setAnnouncements((prev) =>
         prev.filter((ann) => ann.id !== announcementToDelete.id)
       );
-  
+
       // Show success notification
       showNotification("Announcement deleted successfully!", "success");
     } catch (error) {
@@ -1110,17 +1101,17 @@ const AnnouncementsPage = () => {
     try {
       // Update the announcement in Firestore
       await updateAnnouncement(updatedAnnouncement.id, updatedAnnouncement);
-  
+
       // Update the local state
       setAnnouncements((prev) =>
         prev.map((ann) =>
           ann.id === updatedAnnouncement.id ? updatedAnnouncement : ann
         )
       );
-  
+
       // Show success notification
       showNotification("Announcement updated successfully!", "success");
-  
+
       // Close the edit modal
       setShowEditAnnouncementForm(false);
     } catch (error) {
@@ -1133,37 +1124,43 @@ const AnnouncementsPage = () => {
     setAnnouncementToEdit(announcement);
     setShowEditAnnouncementForm(true);
   };
-  
+
   const handleDeleteClick = (announcement) => {
     setAnnouncementToDelete(announcement);
     setShowDeleteConfirmation(true);
   };
 
   // Filter announcements based on search query
-  const filteredAnnouncements = announcements?
-  announcements
-  .filter((announcement) => announcement) // Filter out undefined/null announcements
-  .filter((announcement) =>
-    announcement.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    announcement.content.toLowerCase().includes(searchQuery.toLowerCase())
-  ):[];
+  const filteredAnnouncements = announcements
+    ? announcements
+        .filter((announcement) => announcement) // Filter out undefined/null announcements
+        .filter(
+          (announcement) =>
+            announcement.title
+              .toLowerCase()
+              .includes(searchQuery.toLowerCase()) ||
+            announcement.content
+              .toLowerCase()
+              .includes(searchQuery.toLowerCase())
+        )
+    : [];
 
   const handleSaveAnnouncement = async (newAnnouncement) => {
     try {
       // Save the announcement to Firestore
-      const response= await createAnnouncement(newAnnouncement)
+      const response = await createAnnouncement(newAnnouncement);
       // Update the local state with the new announcement (including the Firestore ID)
       setAnnouncements((prev) => [
         { ...newAnnouncement, id: response.id }, // Add Firestore ID to the announcement
         ...prev,
       ]);
-  
+
       // Close the modal
       setShowNewAnnouncementForm(false);
-  
+
       // Show success notification
       showNotification("Announcement created successfully!", "success");
-  
+
       // Log the action
       await logAction(
         "Admin",
@@ -1198,23 +1195,20 @@ const AnnouncementsPage = () => {
         <h1 className="text-3xl font-bold">Announcements</h1>
 
         <div className="flex w-full max-sm:flex-col justify-between p-4 gap-4">
-          
-          <div classname="sticky top-20">
-             <ExpandableSearchBar
+          <ExpandableSearchBar
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
             onSearch={null}
           />
-          </div>
-
-           
 
           <button
             onClick={() => setShowNewAnnouncementForm(true)}
             className="flex gap-2 text-nowrap h-fit px-4 py-3 bg-blue-600 rounded-md hover:bg-blue-700 transition-colors font-medium"
           >
             <PlusCircle size={20} />
-            <span className="hidden sm:inline text-white ">New Announcement</span>
+            <span className="hidden sm:inline text-white ">
+              New Announcement
+            </span>
           </button>
         </div>
       </div>
@@ -1268,7 +1262,7 @@ const AnnouncementsPage = () => {
               announcements={catAnnouncements}
               onAnnouncementClick={setSelectedAnnouncement}
               onEdit={handleEditClick}
-      onDelete={handleDeleteClick}
+              onDelete={handleDeleteClick}
             />
           );
         })

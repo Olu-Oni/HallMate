@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
 import ExpandableSearchBar from "../../Components/ExpandableSearchBar";
 import { getAllAnnouncements } from "../../services/announcements";
-
+import {
+  Calendar,
+  User,
+  FileText,
+} from "lucide-react";
 //to display full announcement when clicked
 const Modal = ({ announcement, onClose }) => {
   if (!announcement) return null;
@@ -43,36 +47,87 @@ const Category = ({ category, announcements, onAnnouncementClick }) => {
   );
 };
 
+// Modern Announcement Card
 const Announcement = ({ announcement, onClick }) => {
-  // shortening the content of each announcement if over 110 length
-  const findNextIndex = (arr, char, start) => {
-    for (let i = start; i < arr.length; i++) {
-      if (arr[i] === char) {
-        return i;
-      }
-    }
-    return arr.length - 1;
+  // Find category with highest priority for badge color
+  const getPriorityCategory = () => {
+    if (announcement.category.includes("Pinned")) return "Pinned";
+    if (announcement.category.includes("Latest")) return "Latest";
+    return announcement.category[0];
   };
 
-  const shortenedAnnouncement = (ann, length) => {
-    if (ann.length >= length) {
-      const shortStart = findNextIndex(ann, " ", length);
-      const shortenedAnnouncement = ann.slice(0, shortStart);
-      return shortenedAnnouncement + "  . . .";
-    } else return ann;
+  const getCategoryColor = (category) => {
+    switch (category) {
+      case "Pinned":
+        return "bg-red-100 text-red-800";
+      case "Latest":
+        return "bg-purple-100 text-purple-800";
+      case "General Notice":
+        return "bg-blue-100 text-blue-800";
+      case "Maintenance":
+        return "bg-orange-100 text-orange-800";
+      case "Events":
+        return "bg-green-100 text-green-800";
+      default:
+        return "bg-gray-100 text-gray-800";
+    }
   };
+
+  const shortenContent = (content, maxLength = 120) => {
+    if (content.length <= maxLength) return content;
+
+    // Find the last space before maxLength
+    const lastSpace = content.lastIndexOf(" ", maxLength);
+    return content.substring(0, lastSpace > 0 ? lastSpace : maxLength) + "...";
+  };
+
+  const priorityCategory = getPriorityCategory();
+  const categoryColor = getCategoryColor(priorityCategory);
 
   return (
     <div
       onClick={onClick}
-      className="p-4 border rounded shadow-sm w-72 overflow-hidden sm:w-96  shrink-0 h-40 secondaryBg cursor-pointer hover:shadow-md transition-shadow"
+      className="flex flex-col p-5 border rounded-lg shadow-sm hover:shadow-md transition-all secondaryBg w-72 md:w-80 shrink-0 h-52 cursor-pointer"
     >
-      <h2 className="text-xl font-semibold">{announcement.title}</h2>
-      <p className="text-sm text-gray-500">{announcement.date}</p>
-      <p className="mt-2">{shortenedAnnouncement(announcement.content, 80)}</p>
+      <div className="flex items-start justify-between mb-2">
+        <h2 className="text-lg font-bold line-clamp-1">{announcement.title}</h2>
+        <span
+          className={`text-xs px-2 py-1 rounded-full font-medium ${categoryColor}`}
+        >
+          {priorityCategory}
+        </span>
+      </div>
+
+      <div className="flex items-center gap-1 text-xs text-gray-500 mb-2">
+        <Calendar size={12} />
+        <span>{announcement.date}</span>
+        {announcement.sender && (
+          <>
+            <span className="mx-1">•</span>
+            <User size={12} />
+            <span>{announcement.sender}</span>
+          </>
+        )}
+      </div>
+
+      <p className="text- text-sm flex-grow line-clamp-4">
+        {shortenContent(announcement.content)}
+      </p>
+
+      {announcement.attachments && announcement.attachments.length > 0 && (
+        <div className="mt-2 flex items-center gap-1 text-xs text-gray-500">
+          <FileText size={12} />
+          <span>
+            {announcement.attachments.length} attachment
+            {announcement.attachments.length !== 1 ? "s" : ""}
+          </span>
+        </div>
+      )}
+
     </div>
   );
 };
+
 
 const AnnouncementsPage = () => {
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);

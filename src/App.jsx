@@ -75,7 +75,7 @@ const App = () => {
       getUser(currentUser.uid).then((response) => setUserInfo(response));
       
       // notification permission
-      generateToken();
+      // generateToken();
     } else {
       setUserInfo({});
       console.log("logged out plx");
