@@ -12,7 +12,7 @@ const Modal = ({ announcement, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded shadow-lg w-full max-w-2xl mx-4">
+      <div className="primaryBg p-6 rounded shadow-lg w-full max-w-2xl mx-4">
         <h2 className="text-xl font-semibold">{announcement.title}</h2>
         <p className="text-sm text-gray-500">{announcement.date}</p>
         <p className="mt-2">{announcement.content}</p>
